@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<item value="D:\FRC\CTRE_Phoenix_FRCLibs_NON-WINDOWS_v5.8.1.0\java\lib" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="C:\Users\Max\Documents\GitHub\gx-frc-19\JarFiles" key="org.eclipse.jdt.ui.lastextjar"/>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
 		<item value="2" key="layout"/>
 		<item value="true" key="group_libraries"/>
