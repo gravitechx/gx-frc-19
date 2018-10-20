@@ -2,7 +2,7 @@
 *.class
 
 # .metadata files
-*.metadata
+.metadata\*
 
 # Log file
 *.log
