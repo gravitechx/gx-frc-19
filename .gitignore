@@ -1,8 +1,8 @@
+# Created by https://www.gitignore.io/api/java
+
+### Java ###
 # Compiled class file
 *.class
-
-# .metadata files
-.metadata\*
 
 # Log file
 *.log
@@ -24,3 +24,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+# End of https://www.gitignore.io/api/java
