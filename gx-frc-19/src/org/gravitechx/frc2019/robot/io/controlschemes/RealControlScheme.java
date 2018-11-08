@@ -4,6 +4,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import org.gravitechx.frc2019.robot.Constants;
 
 public class RealControlScheme {
+	private static RealControlScheme oneInstance = new RealControlScheme();
+	public static RealControlScheme getInstance(){
+		return oneInstance;
+	}
+	
 	private static Joystick throttleJoystick;
 	private static Joystick rotationJoystick;
 	
