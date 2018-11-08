@@ -39,8 +39,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		schemy = new RealControlScheme();
-		drive = new Drive();
+		schemy = RealControlScheme.getInstance();
+		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
