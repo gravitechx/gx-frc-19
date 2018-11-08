@@ -7,6 +7,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 
 public class Drive {
+	private static Drive oneInstance = new Drive();
+	public static Drive getInstance(){
+		return oneInstance;
+	}
+	
 	private WPI_TalonSRX leftMasterTalon;
 	private WPI_TalonSRX rightMasterTalon;
 	
