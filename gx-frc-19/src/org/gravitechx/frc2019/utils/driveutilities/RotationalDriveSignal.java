@@ -2,7 +2,6 @@ package org.gravitechx.frc2019.utils.driveutilities;
 
 public class RotationalDriveSignal {
 	private double speed, rotation;
-	private DriveSignalUtilities utility = new DriveSignalUtilities();
 	
 	public RotationalDriveSignal(double givenSignal, double givenRotation){
 		speed = givenSignal;
@@ -18,8 +17,8 @@ public class RotationalDriveSignal {
 	}
 	
 	public void limitValues() {
-		speed = utility.limit(speed);
-		rotation = utility.limit(rotation);
+		speed = DriveSignalUtilities.limit(speed);
+		rotation = DriveSignalUtilities.limit(rotation);
 	}
 	
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
