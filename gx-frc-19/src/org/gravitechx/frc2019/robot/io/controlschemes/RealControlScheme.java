@@ -8,7 +8,7 @@ public class RealControlScheme {
 	private static Joystick rotationJoystick;
 	
 	//Constructors
-	protected RealControlScheme() {
+	public RealControlScheme() {
 		throttleJoystick = new Joystick(Constants.THROTTLE_JOYSTICK_PORT);//Set the throttle joystick to a port specified in constants
 		rotationJoystick = new Joystick(Constants.ROTATION_JOYSTICK_PORT);//Set the wheel joystick to a port specified in constants
 	}
