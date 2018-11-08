@@ -5,16 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team6619.robot;
+package org.gravitechx.frc2019.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team6619.robot.commands.ExampleCommand;
-import org.usfirst.frc.team6619.robot.subsystems.ExampleSubsystem;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -23,8 +20,7 @@ import org.usfirst.frc.team6619.robot.subsystems.ExampleSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
-	public static OI m_oi;
+	//public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -35,8 +31,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		m_oi = new OI();
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
+		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 	}
