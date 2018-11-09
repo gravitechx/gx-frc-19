@@ -5,7 +5,7 @@ import org.gravitechx.frc2019.robot.Constants;
 
 public class RealControlScheme {
 	private static RealControlScheme oneInstance = new RealControlScheme();
-	private static RealControlScheme getInstance(){
+	public static RealControlScheme getInstance(){
 		return oneInstance;
 	}
 	
@@ -13,7 +13,7 @@ public class RealControlScheme {
 	private static Joystick rotationJoystick;
 	
 	//Constructors
-	public RealControlScheme() {
+	private RealControlScheme() {
 		throttleJoystick = new Joystick(Constants.THROTTLE_JOYSTICK_PORT);//Set the throttle joystick to a port specified in constants
 		rotationJoystick = new Joystick(Constants.ROTATION_JOYSTICK_PORT);//Set the wheel joystick to a port specified in constants
 	}
