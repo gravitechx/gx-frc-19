@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 	//public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	
-	public RealControlScheme schemy;
+	public RealControlScheme driverControls;
 	public Drive drive;
 	public DrivePipeline pipe;
 	Command m_autonomousCommand;
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		schemy = RealControlScheme.getInstance();
+		driverControls = RealControlScheme.getInstance();
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		drive.go(pipe.filter(new RotationalDriveSignal(schemy.getThrottle(), schemy.getRotation())));
+		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation())));
 		Scheduler.getInstance().run();
 	}
 
