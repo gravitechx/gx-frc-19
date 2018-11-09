@@ -18,7 +18,7 @@ public class Drive {
 	private WPI_VictorSPX leftSlave;
 	private WPI_VictorSPX rightSlave;
 	
-	public Drive() {
+	private Drive() {
 		leftMasterTalon = new WPI_TalonSRX(Constants.LEFT_MASTER_TALON_PORT);
 		rightMasterTalon = new WPI_TalonSRX(Constants.RIGHT_MASTER_TALON_PORT);
 		
@@ -28,6 +28,7 @@ public class Drive {
 		leftSlave.follow(leftMasterTalon);
 		rightSlave.follow(rightMasterTalon);
 	}
+	
 	public void set(DifferentialDriveSignal diffSignal) {
 		leftMasterTalon.set(ControlMode.PercentOutput, diffSignal.getLeftSide());
 		rightMasterTalon.set(ControlMode.PercentOutput, diffSignal.getRightSide());
