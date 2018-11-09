@@ -5,7 +5,7 @@ import org.gravitechx.frc2019.robot.Constants;
 
 public class RealControlScheme {
 	private static RealControlScheme oneInstance = new RealControlScheme();
-	public static RealControlScheme getInstance(){
+	private static RealControlScheme getInstance(){
 		return oneInstance;
 	}
 	
