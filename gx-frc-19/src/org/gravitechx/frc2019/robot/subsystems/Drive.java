@@ -28,7 +28,7 @@ public class Drive {
 		leftSlave.follow(leftMasterTalon);
 		rightSlave.follow(rightMasterTalon);
 	}
-	public void go(DifferentialDriveSignal diffSignal) {
+	public void set(DifferentialDriveSignal diffSignal) {
 		leftMasterTalon.set(ControlMode.PercentOutput, diffSignal.getLeftSide());
 		rightMasterTalon.set(ControlMode.PercentOutput, diffSignal.getRightSide());
 	}
