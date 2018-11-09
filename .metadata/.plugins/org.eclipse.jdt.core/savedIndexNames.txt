@@ -1,1 +1,0 @@
-INDEX VERSION 1.131+C:\Users\Max\Documents\GitHub\gx-frc-19\.metadata\.plugins\org.eclipse.jdt.core
