@@ -1,13 +1,22 @@
 package org.gravitechx.frc2019.utils.driveutilities;
-
+/**
+ * contains static methods used to operate on DriveSignals
+ * */
 public class DriveSignalUtilities {
-	//limit the signal to the specified limit. If above limit, set to limit. If below negative limit, set to negative limit. Else keep the same.
+	/**
+	 * limits the inputed signal to the specified limit. 
+	 * If it is above limit, it is set to limit. 
+	 * If it is below negative limit, it is set to negative limit. 
+	 * Otherwise it is kept the same.
+	 * */
 	public static double limit(double signal, double limit) {
 		signal = (signal > limit) ? limit : ((signal < -limit) ? -limit : signal);
 		return signal;
 	}
 	
-	//if only given one value, assume it is the thing to limit. Pass it to above limit function with the limit of one.
+	/**
+	 * limits inputed signal with limit 1.0
+	 * */
 	public static double limit(double signal) {
 		return limit(signal, 1.0);
 	}

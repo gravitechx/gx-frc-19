@@ -7,10 +7,10 @@
 
 package org.gravitechx.frc2019.robot;
 
+import org.gravitechx.frc2019.robot.io.controlschemes.RealControlScheme;
 import org.gravitechx.frc2019.robot.subsystems.Drive;
 import org.gravitechx.frc2019.utils.driveutilities.DrivePipeline;
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
-import org.gravitechx.frc2019.robot.io.controlschemes.RealControlScheme;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		driverControls = RealControlScheme.getInstance();
+		driverControls = RealControlScheme.getInstance();	
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
