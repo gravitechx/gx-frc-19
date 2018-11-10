@@ -26,4 +26,8 @@ public class RotationalDriveSignal {
 		double giveRight = speed - rotation;
 		return new DifferentialDriveSignal(giveLeft, giveRight);
 	}
+
+	public String toString(){
+		return "RotationalDriveSignal[ Rotational: " + rotation + " Linear: " + speed +  " ]";
+	}
 }
