@@ -25,6 +25,6 @@ public class RealControlScheme {
 	
 	//get the wheel rotation value of the driver
 	public double getRotation() {
-		return rotationJoystick.getY();
+		return rotationJoystick.getX();
 	}
 }
