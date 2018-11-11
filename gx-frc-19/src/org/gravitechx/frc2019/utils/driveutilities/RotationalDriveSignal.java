@@ -19,15 +19,15 @@ public class RotationalDriveSignal {
 	}
 	
 	public void limitValues() {
-		speed = DriveSignalUtilities.limit(speed, Constants.SPEED_LIMIT);
-		rotation = DriveSignalUtilities.limit(rotation, Constants.SPEED_LIMIT);
+		speed = DriveSignalUtilities.limit(speed, Constants.DRIVE_SPEED_LIMIT);
+		rotation = DriveSignalUtilities.limit(rotation, Constants.DRIVE_SPEED_LIMIT);
 	}
 	
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
 		double giveLeft = speed + rotation;
 		double giveRight = speed - rotation;
-		giveLeft = DriveSignalUtilities.limit(giveLeft, Constants.SPEED_LIMIT);
-		giveRight = DriveSignalUtilities.limit(giveRight, Constants.SPEED_LIMIT);
+		giveLeft = DriveSignalUtilities.limit(giveLeft, Constants.DRIVE_SPEED_LIMIT);
+		giveRight = DriveSignalUtilities.limit(giveRight, Constants.DRIVE_SPEED_LIMIT);
 		return new DifferentialDriveSignal(giveLeft, giveRight);
 	}
 }
