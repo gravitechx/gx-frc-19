@@ -17,5 +17,5 @@ public class Constants {
 	* should be put into this constant should be in between 1, the 
 	* maximum speed, and 0, or not moving at all.
 	* */
-	public static final int SPEED_LIMIT = 1;
+	public static final int DRIVE_SPEED_LIMIT = 1;
 }
