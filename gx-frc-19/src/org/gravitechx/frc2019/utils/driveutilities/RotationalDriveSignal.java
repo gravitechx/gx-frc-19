@@ -26,8 +26,8 @@ public class RotationalDriveSignal {
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
 		double giveLeft = speed + rotation;
 		double giveRight = speed - rotation;
-		DriveSignalUtilities.limit(giveLeft, Constants.SPEED_LIMIT);
-		DriveSignalUtilities.limit(giveRight, Constants.SPEED_LIMIT);
+		giveLeft = DriveSignalUtilities.limit(giveLeft, Constants.SPEED_LIMIT);
+		giveRight = DriveSignalUtilities.limit(giveRight, Constants.SPEED_LIMIT);
 		return new DifferentialDriveSignal(giveLeft, giveRight);
 	}
 }
