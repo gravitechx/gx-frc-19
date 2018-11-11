@@ -16,4 +16,8 @@ public class DifferentialDriveSignal {
 	public double getRightSide() {
 		return rightSideOutput;
 	}
+
+	public String toString(){
+		return "DifferentialDriveSignal[ LeftMotorOutput: " + leftSideOutput + " RightMotorOutput: " + rightSideOutput +  " ]";
+	}
 }
