@@ -3,29 +3,29 @@ package org.gravitechx.frc2019.utils.driveutilities;
 import org.gravitechx.frc2019.robot.Constants;
 
 public class RotationalDriveSignal {
-	private double speed, rotation;
+	private double speedSignal, rotationalSignal;
 	
 	public RotationalDriveSignal(double givenSignal, double givenRotation){
-		speed = givenSignal;
-		rotation = givenRotation;
+		speedSignal = givenSignal;
+		rotationalSignal = givenRotation;
 	}
 	
 	public double getSpeed(){
-		return speed;
+		return speedSignal;
 	}
 	
 	public double getRotation(){
-		return rotation;
+		return rotationalSignal;
 	}
 	
 	public void limitValues() {
-		speed = DriveSignalUtilities.limit(speed, Constants.DRIVE_SPEED_LIMIT);
-		rotation = DriveSignalUtilities.limit(rotation, Constants.DRIVE_SPEED_LIMIT);
+		speedSignal = DriveSignalUtilities.limit(speedSignal, Constants.DRIVE_SPEED_LIMIT);
+		rotationalSignal = DriveSignalUtilities.limit(rotationalSignal, Constants.DRIVE_SPEED_LIMIT);
 	}
 	
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
-		double giveLeft = speed + rotation;
-		double giveRight = speed - rotation;
+		double giveLeft = speedSignal + rotationalSignal;
+		double giveRight = speedSignal - rotationalSignal;
 		return new DifferentialDriveSignal(giveLeft, giveRight);
 	}
 }
