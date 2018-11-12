@@ -3,24 +3,24 @@ package org.gravitechx.frc2019.utils.driveutilities;
 import org.gravitechx.frc2019.robot.Constants;
 
 public class DifferentialDriveSignal {
-	private double leftSideOutput;
-	private double rightSideOutput;
+	private double leftSignal;
+	private double rightSignal;
 	
 	public DifferentialDriveSignal(double givenLeft, double givenRight) {
-		leftSideOutput = givenLeft;
-		rightSideOutput = givenRight;
+		leftSignal = givenLeft;
+		rightSignal = givenRight;
 	}
 	
 	public void limitValues() {
-		leftSideOutput = DriveSignalUtilities.limit(leftSideOutput, Constants.DRIVE_SPEED_LIMIT);
-		rightSideOutput = DriveSignalUtilities.limit(rightSideOutput, Constants.DRIVE_SPEED_LIMIT);
+		leftSignal = DriveSignalUtilities.limit(leftSignal, Constants.DRIVE_SPEED_LIMIT);
+		rightSignal = DriveSignalUtilities.limit(rightSignal, Constants.DRIVE_SPEED_LIMIT);
 	}
 	
 	public double getLeftSide() {
-		return leftSideOutput;
+		return leftSignal;
 	}
 	
 	public double getRightSide() {
-		return rightSideOutput;
+		return rightSignal;
 	}
 }
