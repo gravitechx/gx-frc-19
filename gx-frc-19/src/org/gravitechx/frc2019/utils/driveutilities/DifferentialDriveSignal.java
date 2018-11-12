@@ -1,19 +1,17 @@
 package org.gravitechx.frc2019.utils.driveutilities;
 
-import org.gravitechx.frc2019.robot.Constants;
-
 public class DifferentialDriveSignal {
-	private double leftSignal;
-	private double rightSignal;
+	private double leftSignal, rightSignal, limitConstant;
 	
-	public DifferentialDriveSignal(double givenLeft, double givenRight) {
+	public DifferentialDriveSignal(double givenLeft, double givenRight, double limitConstant) {
 		leftSignal = givenLeft;
 		rightSignal = givenRight;
+		this.limitConstant = limitConstant;
 	}
 	
 	public void limitValues() {
-		leftSignal = DriveSignalUtilities.limit(leftSignal, Constants.DRIVE_SPEED_LIMIT);
-		rightSignal = DriveSignalUtilities.limit(rightSignal, Constants.DRIVE_SPEED_LIMIT);
+		leftSignal = DriveSignalUtilities.limit(leftSignal, limitConstant);
+		rightSignal = DriveSignalUtilities.limit(rightSignal, limitConstant);
 	}
 	
 	public double getLeftSide() {

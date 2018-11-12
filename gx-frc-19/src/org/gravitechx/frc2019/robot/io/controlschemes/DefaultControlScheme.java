@@ -3,9 +3,9 @@ package org.gravitechx.frc2019.robot.io.controlschemes;
 import edu.wpi.first.wpilibj.Joystick;
 import org.gravitechx.frc2019.robot.Constants;
 
-public class RealControlScheme {
-	private static RealControlScheme oneInstance = new RealControlScheme();
-	public static RealControlScheme getInstance(){
+public class DefaultControlScheme {
+	private static DefaultControlScheme oneInstance = new DefaultControlScheme();
+	public static DefaultControlScheme getInstance(){
 		return oneInstance;
 	}
 	
@@ -13,7 +13,7 @@ public class RealControlScheme {
 	private static Joystick rotationJoystick;
 	
 	//Constructors
-	private RealControlScheme() {
+	private DefaultControlScheme() {
 		throttleJoystick = new Joystick(Constants.THROTTLE_JOYSTICK_PORT);//Set the throttle joystick to a port specified in constants
 		rotationJoystick = new Joystick(Constants.ROTATION_JOYSTICK_PORT);//Set the wheel joystick to a port specified in constants
 	}
