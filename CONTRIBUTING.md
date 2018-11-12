@@ -21,8 +21,8 @@ Coding style inherits from [Google Style.](https://google.github.io/styleguide/j
 
 The code base is structured for extendability. All code must follow a strict structure be be integrated into the main branch. See below for more information.
 
-- `com.team6619.frc2019.io`: Contains controller io and smartdashboard related classes.
-- `com.team6619.frc2019.subsystems`: A subsystem is a partition of a robots function and contains one main class.
+- `com.team6619.frc2019.robot.io`: Contains controller io and smartdashboard related classes.
+- `com.team6619.frc2019.robot.subsystems`: A subsystem is a partition of a robots function and contains one main class.
 - `com.team6619.frc2019.util`: Contains utility or helper functions for the robot. All functionality in util *should be unit tested*
 
 ### Commenting
