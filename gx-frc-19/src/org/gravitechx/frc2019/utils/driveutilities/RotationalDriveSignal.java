@@ -1,30 +1,31 @@
 package org.gravitechx.frc2019.utils.driveutilities;
 
 public class RotationalDriveSignal {
-	private double speed, rotation;
+	private double speedSignal, rotationalSignal, limitConstant;
 	
-	public RotationalDriveSignal(double givenSignal, double givenRotation){
-		speed = givenSignal;
-		rotation = givenRotation;
+	public RotationalDriveSignal(double givenSignal, double givenRotation, double limitConstant){
+		speedSignal = givenSignal;
+		rotationalSignal = givenRotation;
+		this.limitConstant = limitConstant;
 	}
 	
 	public double getSpeed(){
-		return speed;
+		return speedSignal;
 	}
 	
 	public double getRotation(){
-		return rotation;
+		return rotationalSignal;
 	}
 	
 	public void limitValues() {
-		speed = DriveSignalUtilities.limit(speed);
-		rotation = DriveSignalUtilities.limit(rotation);
+		speedSignal = DriveSignalUtilities.limit(speedSignal, limitConstant);
+		rotationalSignal = DriveSignalUtilities.limit(rotationalSignal, limitConstant);
 	}
 	
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
-		double giveLeft = speed + rotation;
-		double giveRight = speed - rotation;
-		return new DifferentialDriveSignal(giveLeft, giveRight);
+		double giveLeft = speedSignal + rotationalSignal;
+		double giveRight = speedSignal - rotationalSignal;
+		return new DifferentialDriveSignal(giveLeft, giveRight, limitConstant);
 	}
 
 	public String toString(){

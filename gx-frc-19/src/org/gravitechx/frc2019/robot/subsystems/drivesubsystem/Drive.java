@@ -1,4 +1,4 @@
-package org.gravitechx.frc2019.robot.subsystems;
+package org.gravitechx.frc2019.robot.subsystems.drivesubsystem;
 
 import org.gravitechx.frc2019.utils.driveutilities.DifferentialDriveSignal;
 import org.gravitechx.frc2019.robot.Constants;
@@ -18,7 +18,7 @@ public class Drive {
 	private WPI_VictorSPX leftSlave;
 	private WPI_VictorSPX rightSlave;
 	
-	public Drive() {
+	private Drive() {
 		leftMasterTalon = new WPI_TalonSRX(Constants.LEFT_MASTER_TALON_PORT);
 		rightMasterTalon = new WPI_TalonSRX(Constants.RIGHT_MASTER_TALON_PORT);
 		
@@ -28,8 +28,10 @@ public class Drive {
 		leftSlave.follow(leftMasterTalon);
 		rightSlave.follow(rightMasterTalon);
 	}
+	
 	public void set(DifferentialDriveSignal diffSignal) {
+		diffSignal.limitValues();
 		leftMasterTalon.set(ControlMode.PercentOutput, diffSignal.getLeftSide());
-		rightMasterTalon.set(ControlMode.PercentOutput, diffSignal.getRightSide());
+		rightMasterTalon.set(ControlMode.PercentOutput, -diffSignal.getRightSide());
 	}
 }
