@@ -116,6 +116,7 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation(), Constants.DRIVE_SPEED_LIMIT)));
 		Scheduler.getInstance().run();
+
 	}
 
 	/**
