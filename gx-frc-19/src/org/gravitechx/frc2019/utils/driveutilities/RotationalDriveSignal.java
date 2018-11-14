@@ -3,10 +3,9 @@ package org.gravitechx.frc2019.utils.driveutilities;
 public class RotationalDriveSignal {
 	private double speedSignal, rotationalSignal, limitConstant;
 	
-	public RotationalDriveSignal(double givenSignal, double givenRotation, double limitConstant){
+	public RotationalDriveSignal(double givenSignal, double givenRotation){
 		speedSignal = givenSignal;
 		rotationalSignal = givenRotation;
-		this.limitConstant = limitConstant;
 	}
 	
 	public double getSpeed(){
@@ -17,9 +16,14 @@ public class RotationalDriveSignal {
 		return rotationalSignal;
 	}
 	
-	public void limitValues() {
+	public void limitValues(double limitConstant) {
 		speedSignal = DriveSignalUtilities.limit(speedSignal, limitConstant);
 		rotationalSignal = DriveSignalUtilities.limit(rotationalSignal, limitConstant);
+	}
+	
+	public void applyDeadband(double throttleDeadband, double rotationalDeadband) {
+		speedSignal = DriveSignalUtilities.applyDeadband(speedSignal, throttleDeadband);
+		rotationalSignal = DriveSignalUtilities.applyDeadband(rotationalSignal, rotationalDeadband);
 	}
 	
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
@@ -29,6 +33,6 @@ public class RotationalDriveSignal {
 	}
 
 	public String toString(){
-		return "RotationalDriveSignal[ Rotational: " + rotationalSignal + " Linear: " + speedSignal +  " ]";
+		return "RotationalDriveSignal[ Linear: " + speedSignal +  " + Rotational: " + rotationalSignal + " ]";
 	}
 }
