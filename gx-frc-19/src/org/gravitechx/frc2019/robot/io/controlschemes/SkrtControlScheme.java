@@ -5,6 +5,11 @@ import org.gravitechx.frc2019.robot.Constants;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class SkrtControlScheme {
+	/**
+	 * This initializes the only instance of the control scheme 
+	 * that will be used at any time. It also allows for the instance
+	 * to be called and received from the Robot.java class.
+	 */
 	private static SkrtControlScheme oneInstance = new SkrtControlScheme();
 	public static SkrtControlScheme getInstance() {
 		return oneInstance;
@@ -19,6 +24,7 @@ public class SkrtControlScheme {
 		rotationJoystick = new Joystick(Constants.ROTATION_JOYSTICK_PORT);
 	}
 	
+	//getters for joystick values
 	public double getThrottle() {
 		return throttleJoystick.getY();
 	}

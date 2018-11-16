@@ -18,8 +18,21 @@ class DriveSignalUtilitiesTest {
 			"1, .5, .5",
 			".25, .5, .25"
 	})
-	void testLimit(double signal, double limit, double limited){
+	void testLimit(double signal, double limit, double result){
 		assertEquals(limited, DriveSignalUtilities.limit(signal, limit),
 				signal + " is not limited within {s | " + (-limit) + " <= s <= " + limit +" }");
+	}
+	
+	@ParameterizedTest(name = "{1} of deadband is applied to {0}")
+	@CsvSource({
+		"-0.01, 0.1, 0",
+		"0.5, 0.1, 0.44",
+		"0.02, 0.1, 0",
+		"-0.7, 0.1, -0.67"
+	})
+	void testDeadband(double signal, double deadband, double result) {
+		assertEquals(result, DriveSignalUtilities.applyDeadband(signal, deadband),
+				signal + "comes out to an incorrect value when a deadband of "
+				+ deadband + "is applied.");
 	}
 }

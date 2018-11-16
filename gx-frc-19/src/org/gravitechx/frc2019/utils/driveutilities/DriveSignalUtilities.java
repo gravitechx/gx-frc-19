@@ -14,6 +14,6 @@ public class DriveSignalUtilities {
 	
 	public static double applyDeadband(double signal, double deadband) {
 		signal = (Math.abs(signal) > deadband) ? ((signal > 0) ? (1/(1 - deadband)) * (signal - deadband) : (1/(1 - deadband)) * (signal + deadband)) : 0.0;
-		return signal;
+		return (Math.round(signal * 100) / 100);
 	}
 }
