@@ -9,6 +9,7 @@ package org.gravitechx.frc2019.robot;
 
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
 import org.gravitechx.frc2019.robot.io.controlschemes.DefaultControlScheme;
+import org.gravitechx.frc2019.robot.io.controlschemes.SkrtControlScheme;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
@@ -27,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 	//public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	
-	public DefaultControlScheme driverControls;
+	public SkrtControlScheme driverControls;
 	public Drive drive;
 	public DrivePipeline pipe;
 	Command m_autonomousCommand;
@@ -39,9 +40,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		driverControls = DefaultControlScheme.getInstance();
+		driverControls = SkrtControlScheme.getInstance();
 		drive = Drive.getInstance();
-		pipe = new DrivePipeline();
+		pipe = new DrivePipeline(driverControls);
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);

@@ -16,6 +16,14 @@ public class RotationalDriveSignal {
 		return rotationalSignal;
 	}
 	
+	public void setSpeed(double speed) {
+		speedSignal = speed;
+	}
+	
+	public void setRotation(double rotation) {
+		rotationalSignal = rotation;
+	}
+	
 	public void limitValues(double limitConstant) {
 		speedSignal = DriveSignalUtilities.limit(speedSignal, limitConstant);
 		rotationalSignal = DriveSignalUtilities.limit(rotationalSignal, limitConstant);
@@ -29,6 +37,10 @@ public class RotationalDriveSignal {
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
 		double giveLeft = speedSignal + rotationalSignal;
 		double giveRight = speedSignal - rotationalSignal;
+		return new DifferentialDriveSignal(giveLeft, giveRight, limitConstant);
+	}
+	
+	public DifferentialDriveSignal toDifferentialDriveSignal(double giveLeft, double giveRight) {
 		return new DifferentialDriveSignal(giveLeft, giveRight, limitConstant);
 	}
 

@@ -4,9 +4,9 @@ import org.gravitechx.frc2019.robot.Constants;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class MaxControlScheme {
-	private static MaxControlScheme oneInstance = new MaxControlScheme();
-	public static MaxControlScheme getInstance() {
+public class SkrtControlScheme {
+	private static SkrtControlScheme oneInstance = new SkrtControlScheme();
+	public static SkrtControlScheme getInstance() {
 		return oneInstance;
 	}
 	
@@ -14,7 +14,7 @@ public class MaxControlScheme {
 	private static Joystick rotationJoystick;
 	
 	//Constructor
-	private MaxControlScheme() {
+	private SkrtControlScheme() {
 		throttleJoystick = new Joystick(Constants.THROTTLE_JOYSTICK_PORT);
 		rotationJoystick = new Joystick(Constants.ROTATION_JOYSTICK_PORT);
 	}
@@ -28,10 +28,19 @@ public class MaxControlScheme {
 	}
 	
 	public boolean getRightTurnButton() {
-		return throttleJoystick.getRawButtonPressed(0);
+		return throttleJoystick.getRawButton(Constants.RIGHT_SWIVEL_BUTTON);
 	}
 	
 	public boolean getLeftTurnButton() {
-		return throttleJoystick.getTopPressed();
+		return throttleJoystick.getRawButton(Constants.LEFT_SWIVEL_BUTTON);
+	}
+	
+	//getters for the sticks
+	public Joystick getThrottleStick() {
+		return throttleJoystick;
+	}
+	
+	public Joystick getRotationStick() {
+		return rotationJoystick;
 	}
 }

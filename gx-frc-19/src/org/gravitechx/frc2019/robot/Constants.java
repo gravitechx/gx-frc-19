@@ -3,7 +3,10 @@ package org.gravitechx.frc2019.robot;
 public class Constants {
 	//these two port values are taken from gx-frc-18 github
 	public static final int THROTTLE_JOYSTICK_PORT = 1;
-	public static final int ROTATION_JOYSTICK_PORT= 0;
+	public static final int ROTATION_JOYSTICK_PORT = 0;
+	
+	public static final int RIGHT_SWIVEL_BUTTON = 4;
+	public static final int LEFT_SWIVEL_BUTTON = 3;
 	
 	//Values for the motor controller ports
 	public static final int LEFT_MASTER_TALON_PORT = 3;
