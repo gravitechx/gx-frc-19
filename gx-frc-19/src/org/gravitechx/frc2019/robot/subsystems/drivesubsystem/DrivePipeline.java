@@ -35,7 +35,7 @@ public class DrivePipeline {
 		if (!(driverControls.getLeftTurnButton() && driverControls.getRightTurnButton())) {
 			if (driverControls.getLeftTurnButton()) {
 				return rotationalDriveSignal.toDifferentialDriveSignal(-1 * Constants.DRIVE_SPEED_LIMIT, 1 * Constants.DRIVE_SPEED_LIMIT);
-			} else {
+			} else if (driverControls.getRightTurnButton()) {
 				return rotationalDriveSignal.toDifferentialDriveSignal(1 * Constants.DRIVE_SPEED_LIMIT, -1 * Constants.DRIVE_SPEED_LIMIT);
 			}
 		}
