@@ -1,20 +1,25 @@
 package org.gravitechx.frc2019.utils.driveutilities;
 
 public class DifferentialDriveSignal {
-	private double leftSideOutput;
-	private double rightSideOutput;
+	private double leftSignal, rightSignal, limitConstant;
 	
-	public DifferentialDriveSignal(double givenLeft, double givenRight) {
-		leftSideOutput = givenLeft;
-		rightSideOutput = givenRight;
+	public DifferentialDriveSignal(double givenLeft, double givenRight, double limitConstant) {
+		leftSignal = givenLeft;
+		rightSignal = givenRight;
+		this.limitConstant = limitConstant;
+	}
+	
+	public void limitValues() {
+		leftSignal = DriveSignalUtilities.limit(leftSignal, limitConstant);
+		rightSignal = DriveSignalUtilities.limit(rightSignal, limitConstant);
 	}
 	
 	public double getLeftSide() {
-		return leftSideOutput;
+		return leftSignal;
 	}
 	
 	public double getRightSide() {
-		return rightSideOutput;
+		return rightSignal;
 	}
 
 	public String toString(){
