@@ -17,11 +17,18 @@ public class DrivePipeline {
 	}
 	
 	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal) {
-		//limits the values of the drive to the limit specified in Constants.java
-		rotationalDriveSignal.limitValues(Constants.DRIVE_SPEED_LIMIT);
-		
 		//applies the Constants.java deadband amounts to both throttle and wheel/rotation joystick
 		rotationalDriveSignal.applyDeadband(Constants.THROTTLE_DEADBAND, Constants.ROTATION_DEADBAND);
+		
+		//scale the wheel so that you get the same
+		rotationalDriveSignal.limitWheelSensitivity(Constants.WHEEL_SENSITIVITY_VALUE);
+
+		//scales the joystick values to what we want them to be (HAHAHAHA)
+		rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE);
+		
+		//limits the values of the drive to the limit specified in Constants.java
+		rotationalDriveSignal.limitValues((1 - (0.0 * Constants.SPEED_LIMIT_WHEN_LIFT_UP)) * Constants.SPEED_SCALE_VALUE);
+		//Change this value to lift height      ^^^ Change this when the lift subsystem can give us the numbers
 		
 		/**
 		 * This next segment of code addresses if the top turn buttons
@@ -34,9 +41,9 @@ public class DrivePipeline {
 		 */
 		if (!(driverControls.getLeftTurnButton() && driverControls.getRightTurnButton())) {
 			if (driverControls.getLeftTurnButton()) {
-				return rotationalDriveSignal.toDifferentialDriveSignal(-1 * Constants.DRIVE_SPEED_LIMIT, 1 * Constants.DRIVE_SPEED_LIMIT);
+				return rotationalDriveSignal.toDifferentialDriveSignal(-1 * Constants.SPEED_SCALE_VALUE, 1 * Constants.SPEED_SCALE_VALUE);
 			} else if (driverControls.getRightTurnButton()) {
-				return rotationalDriveSignal.toDifferentialDriveSignal(1 * Constants.DRIVE_SPEED_LIMIT, -1 * Constants.DRIVE_SPEED_LIMIT);
+				return rotationalDriveSignal.toDifferentialDriveSignal(1 * Constants.SPEED_SCALE_VALUE, -1 * Constants.SPEED_SCALE_VALUE);
 			}
 		}
 		

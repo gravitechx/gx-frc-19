@@ -14,13 +14,23 @@ public class Constants {
 	public static final int LEFT_SLAVE_VICTOR_PORT = 1;
 	public static final int RIGHT_SLAVE_VICTOR_PORT = 3;
 	
-	/* *
-	* The limit here indicates the limit of how fast we should go
-	* when giving power to the motor controllers. The values that
-	* should be put into this constant should be in between 1, the 
-	* maximum speed, and 0, or not moving at all.
-	* */
-	public static final double DRIVE_SPEED_LIMIT = 1;
+	/**
+	 * The speed scale value is the overall speed scale the robot
+	 * should be limited to. The wheel sensitivity value is the value
+	 * that the wheel should be as sensitive as. For instance, a value
+	 * of (2) would make maximum turn be at 1/2 the wheel turn, as it is
+	 * twice as sensitive.
+	 */
+	public static final double SPEED_SCALE_VALUE = 0.25;
+	public static final double WHEEL_SENSITIVITY_VALUE = 2;
+	
+	/**
+	 * This number (between 0 and 1), represents the reduced speed
+	 * of the robot when the lift is up. This number limits the speed
+	 * the joystick can give in when trying to drive with the lift. 
+	 * NOT CURRENTLY  IMPLEMENTED
+	 */
+	public static final double SPEED_LIMIT_WHEN_LIFT_UP = 0.25;
 	
 	public static final double THROTTLE_DEADBAND = 0;
 	public static final double ROTATION_DEADBAND = 0;

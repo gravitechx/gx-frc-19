@@ -1,5 +1,7 @@
 package org.gravitechx.frc2019.utils.driveutilities;
 
+import org.gravitechx.frc2019.robot.Constants;
+
 public class RotationalDriveSignal {
 	private double speedSignal, rotationalSignal, limitConstant;
 	
@@ -27,6 +29,16 @@ public class RotationalDriveSignal {
 	public void limitValues(double limitConstant) {
 		speedSignal = DriveSignalUtilities.limit(speedSignal, limitConstant);
 		rotationalSignal = DriveSignalUtilities.limit(rotationalSignal, limitConstant);
+	}
+	
+	public void scaleValues(double speedScaleConstant) {
+		speedSignal = DriveSignalUtilities.scale(speedSignal,speedScaleConstant);
+		rotationalSignal = DriveSignalUtilities.scale(rotationalSignal, speedScaleConstant);
+	}
+	
+	public void limitWheelSensitivity(double sensitivity) {
+		rotationalSignal = DriveSignalUtilities.scale(rotationalSignal, sensitivity);
+		rotationalSignal = DriveSignalUtilities.limit(rotationalSignal);
 	}
 	
 	public void applyDeadband(double throttleDeadband, double rotationalDeadband) {
