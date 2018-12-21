@@ -32,6 +32,24 @@ public class Constants {
 	 */
 	public static final double SPEED_LIMIT_WHEN_LIFT_UP = 0.25;
 	
+	
+	/**
+	 * Indicated the value of deadband that the throttle joystick
+	 * should apply. This should be increased if the sensitivity of
+	 * the joystick should be increased. The lower this is, the more
+	 * prone the robot is to register slight movements and small things
+	 * that otherwise should not be included. The number should be
+	 * between 0 (no change) and 1 (very insensitive).
+	 */
 	public static final double THROTTLE_DEADBAND = 0;
+	
+	/** 
+	 * This value represents the deadband that should be applied to
+	 * the wheel, aka the rotation joystick. This deadband should be
+	 * increased to increase the sensitivity of the wheel. A higher
+	 * number will make the wheel less responsive to slight changes.
+	 * The number should be between 0 (no change) and 1 (very insen-
+	 * sitive).
+	 */
 	public static final double ROTATION_DEADBAND = 0;
 }

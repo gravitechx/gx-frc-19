@@ -1,7 +1,5 @@
 package org.gravitechx.frc2019.utils.driveutilities;
 
-import org.gravitechx.frc2019.robot.Constants;
-
 public class RotationalDriveSignal {
 	private double speedSignal, rotationalSignal, limitConstant;
 	

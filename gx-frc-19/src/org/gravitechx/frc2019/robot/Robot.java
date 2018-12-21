@@ -8,7 +8,6 @@
 package org.gravitechx.frc2019.robot;
 
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
-import org.gravitechx.frc2019.robot.io.controlschemes.DefaultControlScheme;
 import org.gravitechx.frc2019.robot.io.controlschemes.SkrtControlScheme;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;

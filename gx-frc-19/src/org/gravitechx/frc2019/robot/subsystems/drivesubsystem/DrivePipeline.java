@@ -20,10 +20,10 @@ public class DrivePipeline {
 		//applies the Constants.java deadband amounts to both throttle and wheel/rotation joystick
 		rotationalDriveSignal.applyDeadband(Constants.THROTTLE_DEADBAND, Constants.ROTATION_DEADBAND);
 		
-		//scale the wheel so that you get the same
+		//scale the wheel
 		rotationalDriveSignal.limitWheelSensitivity(Constants.WHEEL_SENSITIVITY_VALUE);
 
-		//scales the joystick values to what we want them to be (HAHAHAHA)
+		//scales the joystick values to what we want them to be, adjusting speed
 		rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE);
 		
 		//limits the values of the drive to the limit specified in Constants.java
