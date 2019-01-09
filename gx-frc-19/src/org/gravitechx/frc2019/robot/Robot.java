@@ -7,10 +7,11 @@
 
 package org.gravitechx.frc2019.robot;
 
-import org.gravitechx.frc2019.robot.io.controlschemes.RealControlScheme;
-import org.gravitechx.frc2019.robot.subsystems.Drive;
-import org.gravitechx.frc2019.utils.driveutilities.DrivePipeline;
+
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
+import org.gravitechx.frc2019.robot.io.controlschemes.DefaultControlScheme;
+import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
+import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -27,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 	//public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	
-	public RealControlScheme driverControls;
+	public DefaultControlScheme driverControls;
 	public Drive drive;
 	public DrivePipeline pipe;
 	Command m_autonomousCommand;
@@ -39,7 +40,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		driverControls = RealControlScheme.getInstance();	
+
+		driverControls = DefaultControlScheme.getInstance();
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
@@ -114,8 +116,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation())));
+		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation(), Constants.DRIVE_SPEED_LIMIT)));
 		Scheduler.getInstance().run();
+
 	}
 
 	/**
