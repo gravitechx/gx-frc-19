@@ -29,6 +29,6 @@ public class RotationalDriveSignal {
 	}
 
 	public String toString(){
-		return "RotationalDriveSignal[ Rotational: " + rotation + " Linear: " + speed +  " ]";
+		return "RotationalDriveSignal[ Rotational: " + rotationalSignal + " Linear: " + speedSignal +  " ]";
 	}
 }
