@@ -6,17 +6,7 @@ import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
 import org.gravitechx.frc2019.robot.io.controlschemes.SkrtControlScheme;
 
 public class DrivePipeline {
-	/**
-	 * Create the local instance of the control scheme to manipulate
-	 * and grab boolean values from. This is to sense if buttons are 
-	 * being pressed that would influence the drive values.
-	 */
-	private SkrtControlScheme driverControls;
-	public DrivePipeline(SkrtControlScheme intake) {
-		driverControls = intake;
-	}
-	
-	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal) {
+	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal, boolean leftTurnButton, boolean rightTurnButton) {
 		//applies the Constants.java deadband amounts to both throttle and wheel/rotation joystick
 		rotationalDriveSignal.applyDeadband(Constants.THROTTLE_DEADBAND, Constants.ROTATION_DEADBAND);
 		
@@ -29,7 +19,6 @@ public class DrivePipeline {
 		//limits the values of the drive to the limit specified in Constants.java
 		rotationalDriveSignal.limitValues((1 - (0.0 * Constants.SPEED_LIMIT_WHEN_LIFT_UP)) * Constants.SPEED_SCALE_VALUE);
 		//Change this value to lift height      ^^^ Change this when the lift subsystem can give us the numbers
-		
 		/**
 		 * This next segment of code addresses if the top turn buttons
 		 * are being pressed. The first if statement makes the contents only
@@ -39,10 +28,10 @@ public class DrivePipeline {
 		 * statements return custom DifferentialDriveSignals that are tailored
 		 * to limit constants. These values may need to be adjusted.
 		 */
-		if (!(driverControls.getLeftTurnButton() && driverControls.getRightTurnButton())) {
-			if (driverControls.getLeftTurnButton()) {
+		if (!(leftTurnButton && rightTurnButton)) {
+			if (leftTurnButton) {
 				return rotationalDriveSignal.toDifferentialDriveSignal(-1 * Constants.SPEED_SCALE_VALUE, 1 * Constants.SPEED_SCALE_VALUE);
-			} else if (driverControls.getRightTurnButton()) {
+			} else if (rightTurnButton) {
 				return rotationalDriveSignal.toDifferentialDriveSignal(1 * Constants.SPEED_SCALE_VALUE, -1 * Constants.SPEED_SCALE_VALUE);
 			}
 		}

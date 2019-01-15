@@ -23,6 +23,6 @@ public class DifferentialDriveSignal {
 	}
 
 	public String toString(){
-		return "DifferentialDriveSignal[ LeftMotorOutput: " + leftSignal + " RightMotorOutput: " + rightSignal +  " ]";
+		return "DifferentialDriveSignal[ LeftMotorOutput: " + leftSignal + " RightMotorOutput: " + rightSignal +  " LimitConstant: " + limitConstant + " ]";
 	}
 }

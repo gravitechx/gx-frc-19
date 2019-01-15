@@ -26,10 +26,12 @@ public class SkrtControlScheme {
 	
 	//getters for joystick values
 	public double getThrottle() {
-		return throttleJoystick.getY();
+		//System.out.println("THROTTLE: " + throttleJoystick.getY());
+		return (Constants.THROTTLE_IS_REVERSED) ? (-throttleJoystick.getY()) : (throttleJoystick.getY());
 	}
 	
 	public double getRotation() {
+		//System.out.println("ROTATION: " + rotationJoystick.getX());
 		return rotationJoystick.getX();
 	}
 	

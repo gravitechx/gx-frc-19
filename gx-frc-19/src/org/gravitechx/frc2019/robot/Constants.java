@@ -41,7 +41,7 @@ public class Constants {
 	 * that otherwise should not be included. The number should be
 	 * between 0 (no change) and 1 (very insensitive).
 	 */
-	public static final double THROTTLE_DEADBAND = 0;
+	public static final double THROTTLE_DEADBAND = 0.1;
 	
 	/** 
 	 * This value represents the deadband that should be applied to
@@ -51,5 +51,7 @@ public class Constants {
 	 * The number should be between 0 (no change) and 1 (very insen-
 	 * sitive).
 	 */
-	public static final double ROTATION_DEADBAND = 0;
+	public static final double ROTATION_DEADBAND = 0.1;
+	
+	public static final boolean THROTTLE_IS_REVERSED = true;
 }

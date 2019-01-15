@@ -1,11 +1,14 @@
 package org.gravitechx.frc2019.utils.driveutilities;
 
+import org.gravitechx.frc2019.robot.Constants;
+
 public class RotationalDriveSignal {
 	private double speedSignal, rotationalSignal, limitConstant;
 	
 	public RotationalDriveSignal(double givenSignal, double givenRotation){
 		speedSignal = givenSignal;
 		rotationalSignal = givenRotation;
+		limitConstant = Constants.SPEED_SCALE_VALUE;
 	}
 	
 	public double getSpeed(){
@@ -46,8 +49,9 @@ public class RotationalDriveSignal {
 	
 	//converts the class variables that have been manipulated to a DifferentialDriveSignal
 	public DifferentialDriveSignal toDifferentialDriveSignal() {
-		double giveLeft = speedSignal + rotationalSignal;
-		double giveRight = speedSignal - rotationalSignal;
+		//You multiply by the Math.abs speed signal so that you never can move without using throttle joystick
+		double giveLeft = speedSignal + (rotationalSignal * Math.abs(speedSignal));
+		double giveRight = speedSignal - (rotationalSignal * Math.abs(speedSignal));
 		return new DifferentialDriveSignal(giveLeft, giveRight, limitConstant);
 	}
 	

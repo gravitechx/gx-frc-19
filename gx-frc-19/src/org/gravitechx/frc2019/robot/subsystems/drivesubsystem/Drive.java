@@ -31,6 +31,7 @@ public class Drive {
 	
 	public void set(DifferentialDriveSignal diffSignal) {
 		diffSignal.limitValues();
+		System.out.println(diffSignal.toString());
 		leftMasterTalon.set(ControlMode.PercentOutput, diffSignal.getLeftSide());
 		rightMasterTalon.set(ControlMode.PercentOutput, -diffSignal.getRightSide());
 	}
