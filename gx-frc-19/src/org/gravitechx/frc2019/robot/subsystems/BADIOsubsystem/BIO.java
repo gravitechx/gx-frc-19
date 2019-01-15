@@ -15,16 +15,19 @@ public class BIO {
 		rightIO = new WPI_TALONSRX(Constants.RIGHT_BIO_TALON_PORT);
 	}
 	
-	public void input(int speed) {
-		leftIO.set(Constants.INPUT_SPEED);
-		rightIO = Constants.INPUT_SPEED;
+	public void input(double speed) {
+		leftIO.set(speed);
+		rightIO.set(speed);
 	}
 	
-	public void output() {
-		leftIO = Constants.OUTPUT_SPEED;
-		rightIO = Constants.OUTPUT_SPEED;
+	public void output(double speed) {
+		leftIO.set(speed);
+		rightIO.set(speed);
 	}
 	
+	public static void allignCargo() {
+		//our robot is currently blind... will deal with this issue later
+	}
 	
 
 }
