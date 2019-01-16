@@ -11,4 +11,14 @@ public class DriveSignalUtilities {
 	public static double limit(double signal) {
 		return limit(signal, 1.0);
 	}
+	
+	//scales the given signal value to the scale double value
+	public static double scale(double signal, double scale) {
+		return signal * scale;
+	}
+	
+	public static double applyDeadband(double signal, double deadband) {
+		signal = (Math.abs(signal) > deadband) ? ((signal > 0) ? (1/(1 - deadband)) * (signal - deadband) : (1/(1 - deadband)) * (signal + deadband)) : 0.0;
+		return signal;
+	}
 }

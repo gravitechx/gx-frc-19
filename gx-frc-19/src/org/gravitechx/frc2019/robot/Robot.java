@@ -8,7 +8,7 @@
 package org.gravitechx.frc2019.robot;
 
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
-import org.gravitechx.frc2019.robot.io.controlschemes.DefaultControlScheme;
+import org.gravitechx.frc2019.robot.io.controlschemes.SkrtControlScheme;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 	//public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	
-	public DefaultControlScheme driverControls;
+	public SkrtControlScheme driverControls;
 	public Drive drive;
 	public DrivePipeline pipe;
 	Command m_autonomousCommand;
@@ -39,12 +39,14 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		driverControls = DefaultControlScheme.getInstance();
+		System.out.print("Initializing robot: ");
+		driverControls = SkrtControlScheme.getInstance();
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		System.out.println("DONE");
 	}
 
 	/**
@@ -54,7 +56,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		System.out.println("Robot Disabled.");
 	}
 
 	@Override
@@ -100,6 +102,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		System.out.print("Initializing Teleop: ");
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -107,6 +110,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		System.out.println("DONE");
 	}
 
 	/**
@@ -114,9 +118,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation(), Constants.DRIVE_SPEED_LIMIT)));
+		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftTurnButton(), driverControls.getRightTurnButton()));
 		Scheduler.getInstance().run();
-
 	}
 
 	/**
