@@ -1,5 +1,1 @@
-.recommenders
-.metadata
-*.class
-.*
-!/.gitignore
+*.*
