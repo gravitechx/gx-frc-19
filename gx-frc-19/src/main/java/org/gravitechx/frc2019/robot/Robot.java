@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 	public Drive drive;
 	public DrivePipeline pipe;
 	Command m_autonomousCommand;
-	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	//SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public PrintWriter printWriter;
 
 	double tinit;
@@ -51,7 +51,6 @@ public class Robot extends TimedRobot {
 		pipe = new DrivePipeline();
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
 		System.out.println("DONE");
 		try {
 			printWriter = new PrintWriter(new FileWriter("/home/lvuser/vlog.txt"));
@@ -88,7 +87,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
+		//m_autonomousCommand = m_chooser.getSelected();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -138,6 +137,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 		tinit = Timer.getFPGATimestamp();
+		SmartDashboard.clearPersistent("big_chungus");
 	}
 
 	/**
@@ -145,12 +145,14 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		double t = Timer.getFPGATimestamp() - tinit;
-		if (t > 2.5){
+		//double t = Timer.getFPGATimestamp() - tinit;
+		SmartDashboard.putNumber("big_chungus", drive.getAveragedSpeed());
+		/*if (t > 2.5){
 			drive.brakeTalons();
 		} else {
 			System.out.println(t);
 			drive.set(pipe.filter(new RotationalDriveSignal((0.64 * t), 0)));
-		}
+		}*/
+		drive.set(pipe.filter(new RotationalDriveSignal(0.2, 0)));
 	}
 }

@@ -11,6 +11,7 @@ public class DriveTalonSRX {
     public static TalonSRX configure(TalonSRX talon){
         talon.setNeutralMode(NeutralMode.Brake);
         talon.selectProfileSlot(0, 0);
+        talon.setSensorPhase(true);
         //talon.configSelectedFeedbackSensor();
         //talon.configNominalOutputForward();
         talon.config_kP(0, Constants.kProportional);

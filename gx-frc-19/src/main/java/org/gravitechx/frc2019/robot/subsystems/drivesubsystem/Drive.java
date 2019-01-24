@@ -29,6 +29,7 @@ public class Drive {
 		
 		leftMasterTalon = DriveTalonSRX.configure(leftMasterTalon);
 		rightMasterTalon = DriveTalonSRX.configure(rightMasterTalon);
+		rightMasterTalon.setInverted(true);
 
 		leftSlave.follow(leftMasterTalon);
 		rightSlave.follow(rightMasterTalon);
@@ -40,11 +41,12 @@ public class Drive {
 	
 	public void set(DifferentialDriveSignal diffSignal) {
 		diffSignal.limitValues();
-		System.out.println(leftMasterTalon.getSelectedSensorVelocity(0));
+		System.out.println("ERROR: " + leftMasterTalon.getClosedLoopError(0));
+		System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
 		//leftMasterTalon.set(ControlMode.Velocity, 1500);
 		//leftMasterTalon.set(ControlMode.Velocity, 1500);
-		leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * (3020));
-		rightMasterTalon.set(ControlMode.Velocity, -diffSignal.getRightSide() * (3020));
+		leftMasterTalon.set(ControlMode.Velocity, 1000);
+		rightMasterTalon.set(ControlMode.Velocity, -1000);
 		//leftMasterTalon.set(ControlMode.PercentOutput,1.0);
 		//rightMasterTalon.set(ControlMode.PercentOutput,-1.0);
 		//System.out.print(getVelocity());
@@ -58,5 +60,8 @@ public class Drive {
 	public void coastTalons(){
 		leftMasterTalon.setNeutralMode(NeutralMode.Coast);
 		rightMasterTalon.setNeutralMode(NeutralMode.Coast);
+	}
+	public double getAveragedSpeed(){
+		return (Math.abs(leftMasterTalon.getSelectedSensorVelocity()) + Math.abs(rightMasterTalon.getSelectedSensorVelocity()))/2;
 	}
 }

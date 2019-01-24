@@ -63,8 +63,5 @@ public class Constants {
 	 public static final double kProportional = 0;
 	 public static final double kIntegral = 0;
 	 public static final double kDerivative = 0;
-	 public static final double kFeedForward = 0.237;
-	 /*public static final double kProportional = 0.199999809;
-	 public static final double kIntegral = 0.000009775162;
-	 public static final double kDerivative = 0.149999857;*/
+	 public static final double kFeedForward = 0.177;
 }
