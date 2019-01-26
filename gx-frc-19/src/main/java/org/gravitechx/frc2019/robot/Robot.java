@@ -12,11 +12,10 @@ import org.gravitechx.frc2019.robot.io.controlschemes.JoystickControlScheme;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.PrintWriter;
 import java.io.FileWriter;
@@ -29,14 +28,13 @@ import java.io.FileWriter;
  */
 public class Robot extends TimedRobot {
 	//public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
-	
 	public JoystickControlScheme driverControls;
 	public Drive drive;
 	public DrivePipeline pipe;
 	Command m_autonomousCommand;
 	//SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public PrintWriter printWriter;
-
+	PowerDistributionPanel pdp = new PowerDistributionPanel(0);
 	double tinit;
 	
 	/**
@@ -129,15 +127,15 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation())));
+		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
 		Scheduler.getInstance().run();
 		//printWriter.append(Timer.getFPGATimestamp() + ", " + drive.getVelocity() + "\n");
 	}
 	
 	@Override
 	public void testInit() {
-		tinit = Timer.getFPGATimestamp();
-		SmartDashboard.clearPersistent("big_chungus");
+		//tinit = Timer.getFPGATimestamp();
+		drive.coastTalons();
 	}
 
 	/**
@@ -145,14 +143,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		//double t = Timer.getFPGATimestamp() - tinit;
 		SmartDashboard.putNumber("big_chungus", drive.getAveragedSpeed());
-		/*if (t > 2.5){
-			drive.brakeTalons();
-		} else {
-			System.out.println(t);
-			drive.set(pipe.filter(new RotationalDriveSignal((0.64 * t), 0)));
-		}*/
-		drive.set(pipe.filter(new RotationalDriveSignal(0.2, 0)));
+		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
 	}
 }

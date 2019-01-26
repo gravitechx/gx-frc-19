@@ -5,7 +5,7 @@ import org.gravitechx.frc2019.utils.driveutilities.DifferentialDriveSignal;
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
 
 public class DrivePipeline {
-	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal) {
+	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal, boolean leftButton, boolean rightButton) {
 		/**
 		 * This next segment of code addresses if the top turn buttons
 		 * are being pressed. The first if statement makes the contents only
@@ -35,6 +35,14 @@ public class DrivePipeline {
 		//limits the values of the drive to the limit specified in Constants.java
 		rotationalDriveSignal.limitValues((1 - (0.0 * Constants.SPEED_LIMIT_WHEN_LIFT_UP)) * Constants.SPEED_SCALE_VALUE);
 		//Change this value to lift height      ^^^ Change this when the lift subsystem can give us the number
+
+		if (leftButton || rightButton){
+			if (leftButton && !rightButton){
+				return rotationalDriveSignal.toDifferentialDriveSignal(-1, 1);
+			} else if (rightButton && !leftButton){
+				return rotationalDriveSignal.toDifferentialDriveSignal(1, -1);
+			}
+		}
 
 		//if no buttons are being pressed, convert as regular and return the signal
 		return rotationalDriveSignal.toDifferentialDriveSignal();

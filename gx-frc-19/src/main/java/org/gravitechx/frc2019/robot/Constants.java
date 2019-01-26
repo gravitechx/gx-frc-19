@@ -41,7 +41,7 @@ public class Constants {
 	 * that otherwise should not be included. The number should be
 	 * between 0 (no change) and 1 (very insensitive).
 	 */
-	public static final double THROTTLE_DEADBAND = 0.1;
+	public static final double THROTTLE_DEADBAND = 0.2;
 	
 	/** 
 	 * This value represents the deadband that should be applied to
@@ -60,8 +60,11 @@ public class Constants {
 	 */
 
 	 //Drive PID Settings
-	 public static final double kProportional = 0;
-	 public static final double kIntegral = 0;
-	 public static final double kDerivative = 0;
+	 public static final boolean enablePID = true;
+	 public static final double kProportional = 1;
+	 public static final double kIntegral = 0.0001;
+	 public static final double kDerivative = 62;
 	 public static final double kFeedForward = 0.177;
+
+	 public static final int allowablePIDError = 20;
 }

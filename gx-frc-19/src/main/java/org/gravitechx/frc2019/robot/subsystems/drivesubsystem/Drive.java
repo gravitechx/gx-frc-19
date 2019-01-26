@@ -21,15 +21,16 @@ public class Drive {
 	private VictorSPX rightSlave;
 	
 	private Drive() {
-		leftMasterTalon = new WPI_TalonSRX(Constants.LEFT_MASTER_TALON_PORT);
-		rightMasterTalon = new WPI_TalonSRX(Constants.RIGHT_MASTER_TALON_PORT);
+		leftMasterTalon = new TalonSRX(Constants.LEFT_MASTER_TALON_PORT);
+		rightMasterTalon = new TalonSRX(Constants.RIGHT_MASTER_TALON_PORT);
 
-		leftSlave = new WPI_VictorSPX(Constants.LEFT_SLAVE_VICTOR_PORT);
-		rightSlave = new WPI_VictorSPX(Constants.RIGHT_SLAVE_VICTOR_PORT);
+		leftSlave = new VictorSPX(Constants.LEFT_SLAVE_VICTOR_PORT);
+		rightSlave = new VictorSPX(Constants.RIGHT_SLAVE_VICTOR_PORT);
 		
 		leftMasterTalon = DriveTalonSRX.configure(leftMasterTalon);
 		rightMasterTalon = DriveTalonSRX.configure(rightMasterTalon);
 		rightMasterTalon.setInverted(true);
+		rightSlave.setInverted(true);
 
 		leftSlave.follow(leftMasterTalon);
 		rightSlave.follow(rightMasterTalon);
@@ -43,13 +44,12 @@ public class Drive {
 		diffSignal.limitValues();
 		System.out.println("ERROR: " + leftMasterTalon.getClosedLoopError(0));
 		System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
-		//leftMasterTalon.set(ControlMode.Velocity, 1500);
-		//leftMasterTalon.set(ControlMode.Velocity, 1500);
-		leftMasterTalon.set(ControlMode.Velocity, 1000);
-		rightMasterTalon.set(ControlMode.Velocity, -1000);
-		//leftMasterTalon.set(ControlMode.PercentOutput,1.0);
-		//rightMasterTalon.set(ControlMode.PercentOutput,-1.0);
-		//System.out.print(getVelocity());
+
+		leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * 6900);
+		rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * 6900);
+
+		//leftMasterTalon.set(ControlMode.PercentOutput, 0.1);
+		//rightMasterTalon.set(ControlMode.PercentOutput, 0.1);
 	}
 	public void brakeTalons(){
 		leftMasterTalon.setNeutralMode(NeutralMode.Brake);

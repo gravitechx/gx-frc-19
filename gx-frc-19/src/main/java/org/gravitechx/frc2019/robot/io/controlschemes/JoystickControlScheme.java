@@ -25,4 +25,12 @@ public class JoystickControlScheme {
 	public double getRotation() {
 		return oneJoystick.getX() * ((-0.5/Constants.SPEED_SCALE_VALUE) * getThrottle() + 1);
 	}
+
+	public boolean getLeftSkrtTurn(){
+		return oneJoystick.getRawButton(3);
+	}
+	
+	public boolean getRightSkrtTurn(){
+		return oneJoystick.getRawButton(4);
+	}
 }
