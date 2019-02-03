@@ -1,17 +1,18 @@
-package app;
+package motionProfiling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.io.*;
 
 public class Path {
 
     private List<double[]> prePath = new ArrayList<double[]>();
-    public static final double MAX_ACCELERATION_OF_ROBOT = 3.0;
-    public static final double MAX_VELOCITY_OF_ROBOT = 12.0 ;
-    public static final double FREQUENCY = 1.0/200.0;
-    public int index = 0;
-    public List<double[]> leftRightMotor = new ArrayList<>(); // format: [time, lVel, lAcc, rVel, rAcc]
+    private static final double MAX_ACCELERATION_OF_ROBOT = 3.0;
+    private static final double MAX_VELOCITY_OF_ROBOT = 12.0 ;
+    private static final double FREQUENCY = 1.0/200.0;
+    private int index = 0;
+    private List<double[]> leftRightMotor = new ArrayList<double[]>(); // format: [time, lVel, lAcc, rVel, rAcc]
 
     public Path(){
         leftRightMotor.add(new double[]{0,0,0,0,0}); //use constructor to create new double[]
@@ -25,8 +26,12 @@ public class Path {
         prePath.add(new double[]{0, MAX_VELOCITY_OF_ROBOT, distance});
     }
     
-    public void generatePath(){
+    public void generatePath() throws InterruptedException, IOException{
         
+    	FileWriter fileWriter = new FileWriter("C:/Users/tyler/temp/setpoint.txt");	//create a text file to store setpoints
+    	PrintWriter printWriter = new PrintWriter(fileWriter);
+    	
+    	
         prePath.add(new double[]{0, 0, 0});//tell robot to decelerate to zero (position at rest)
 
         double rCurrentVel = 0.0;
@@ -34,38 +39,40 @@ public class Path {
         double currentT = 0.0;
 
         for(int i = 0; i < prePath.size(); i++){
-            if(prePath.get(i)[0] == 0) //if path is line
-            {
+            if(prePath.get(i)[0] == 0.0){ //if path is line
                 boolean decelerate = false;
                 double currentDistance = 0.0;
                 for (int j = leftRightMotor.size() - 1; currentDistance < prePath.get(i)[2]; j++){
+                	//Thread.sleep(10);
                     currentT += FREQUENCY;
                     currentDistance += FREQUENCY * leftRightMotor.get(j)[1]; //update distance covered
-                    try {
-                        if(decelerate){
-                            lCurrentVel -= FREQUENCY * MAX_ACCELERATION_OF_ROBOT;     //decrease velocity
-                            leftRightMotor.add(new double[]{currentT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT}); //add new setpoint
-                        }else if(prePath.get(i)[2] - currentDistance > 0 && currentDistance + (lCurrentVel * Math.abs(lCurrentVel - prePath.get(i+1)[1]) / MAX_ACCELERATION_OF_ROBOT) - (Math.pow(lCurrentVel - prePath.get(i+1)[1], 2) / (2*MAX_ACCELERATION_OF_ROBOT)) >= prePath.get(i)[2]){ //if still distance left to cover and it's time to start decelerating
-                            decelerate = true;
-                            lCurrentVel -= FREQUENCY * MAX_ACCELERATION_OF_ROBOT;     //decrease velocity
-                            leftRightMotor.add(new double[]{currentT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT}); //add new setpoint
-                        }else if(MAX_VELOCITY_OF_ROBOT <= lCurrentVel){
-                            leftRightMotor.add(new double[]{currentT, lCurrentVel, 0, lCurrentVel, 0}); //add new setpoint
+                    if(decelerate){
+                        lCurrentVel -= FREQUENCY * MAX_ACCELERATION_OF_ROBOT;     //decrease velocity
+                        leftRightMotor.add(new double[]{currentT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT}); //add new setpoint
+                    }else if(prePath.get(i)[2] - currentDistance > 0 && currentDistance + (lCurrentVel * Math.abs(lCurrentVel - prePath.get(i+1)[1]) / MAX_ACCELERATION_OF_ROBOT) - (Math.pow(lCurrentVel - prePath.get(i+1)[1], 2) / (2*MAX_ACCELERATION_OF_ROBOT)) >= prePath.get(i)[2]){ //if still distance left to cover and it's time to start decelerating
+                        decelerate = true;
+                        lCurrentVel -= FREQUENCY * MAX_ACCELERATION_OF_ROBOT;     //decrease velocity
+                        leftRightMotor.add(new double[]{currentT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT, lCurrentVel, -MAX_ACCELERATION_OF_ROBOT}); //add new setpoint
+                    }else if(MAX_VELOCITY_OF_ROBOT <= lCurrentVel){
+                        leftRightMotor.add(new double[]{currentT, lCurrentVel, 0, lCurrentVel, 0}); //add new setpoint
+                    }else{
+                        if(lCurrentVel + FREQUENCY * MAX_ACCELERATION_OF_ROBOT > MAX_VELOCITY_OF_ROBOT){//if next step results in current velocity greater than max velocity
+                            lCurrentVel = MAX_VELOCITY_OF_ROBOT;
                         }else{
-                            if(lCurrentVel + FREQUENCY * MAX_ACCELERATION_OF_ROBOT > MAX_VELOCITY_OF_ROBOT){//if next step results in current velocity greater than max velocity
-                                lCurrentVel = MAX_VELOCITY_OF_ROBOT;
-                            }else{
-                                lCurrentVel += FREQUENCY * MAX_ACCELERATION_OF_ROBOT;     //increase velocity normally
-                            }
-                            leftRightMotor.add(new double[]{currentT, lCurrentVel, MAX_ACCELERATION_OF_ROBOT, lCurrentVel, MAX_ACCELERATION_OF_ROBOT}); //add new setpoint
+                            lCurrentVel += FREQUENCY * MAX_ACCELERATION_OF_ROBOT;     //increase velocity normally
                         }
-                    } catch (OutOfMemoryError e) {
-                        System.out.println(leftRightMotor.size());
-                        System.exit(1);
+                        leftRightMotor.add(new double[]{currentT, lCurrentVel, MAX_ACCELERATION_OF_ROBOT, lCurrentVel, MAX_ACCELERATION_OF_ROBOT}); //add new setpoint
                     }
+                    System.out.println("Time: "+ leftRightMotor.get(j)[0] + ", lVel: " + leftRightMotor.get(j)[1] + ", lAccel: " + leftRightMotor.get(j)[2] + ", rVel: " + leftRightMotor.get(j)[3] + ", rAccel: "+ leftRightMotor.get(j)[4] +", Distance covered: "+ currentDistance); //print out setpoint to test errors
+                    printWriter.printf("%f,%f%n", leftRightMotor.get(j)[0], leftRightMotor.get(j)[1]);	//add a setpoint to the text file
                 }
             }
+            if(prePath.get(i)[0] == 1.0){
+            	
+            }
+            
         }
+        printWriter.close();
     }
     
     public double[] update(){
