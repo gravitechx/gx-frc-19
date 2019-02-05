@@ -1,9 +1,8 @@
-package motionProfiling;
-import java.util.Arrays;
+package app;
 import java.io.*;
 
 public class PathDriver{
-    public static void main(String[] args) throws InterruptedException, IOException{
+    public static void main(String[] args) throws InterruptedException, IOException {
             
         Path deepSpacePath = new Path();
         deepSpacePath.addLine(100);
