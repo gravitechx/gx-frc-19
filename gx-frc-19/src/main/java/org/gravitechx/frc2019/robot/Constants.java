@@ -61,9 +61,9 @@ public class Constants {
 
 	 //Drive PID Settings
 	 public static final boolean enablePID = true;
-	 public static final double kProportional = 1;
-	 public static final double kIntegral = 0.0001;
-	 public static final double kDerivative = 62;
+	 public static final double kProportional = 0.08;
+	 public static final double kIntegral = 0.0000000000001000230050015;
+	 public static final double kDerivative = 0.1;
 	 public static final double kFeedForward = 0.177;
 
 	 public static final int allowablePIDError = 20;
