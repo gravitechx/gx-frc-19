@@ -15,13 +15,13 @@ public class DrivePipeline {
 		 * statements return custom DifferentialDriveSignals that are tailored
 		 * to limit constants. These values may need to be adjusted.
 		 */
-		/*if (!(leftTurnButton && rightTurnButton)) {
-			if (leftTurnButton) {
-				return rotationalDriveSignal.toDifferentialDriveSignal(-1 * Constants.SPEED_SCALE_VALUE, 1 * Constants.SPEED_SCALE_VALUE);
-			} else if (rightTurnButton) {
-				return rotationalDriveSignal.toDifferentialDriveSignal(1 * Constants.SPEED_SCALE_VALUE, -1 * Constants.SPEED_SCALE_VALUE);
+		if (!(leftButton && rightButton)) {
+			if (leftButton) {
+				return rotationalDriveSignal.toDifferentialDriveSignal(-1 * Constants.SPEED_SCALE_VALUE * Constants.QUIKTURN_TURN_SPEED_ADJUSTMENT, 1 * Constants.SPEED_SCALE_VALUE * Constants.QUIKTURN_TURN_SPEED_ADJUSTMENT);
+			} else if (rightButton) {
+				return rotationalDriveSignal.toDifferentialDriveSignal(1 * Constants.SPEED_SCALE_VALUE * Constants.QUIKTURN_TURN_SPEED_ADJUSTMENT, -1 * Constants.SPEED_SCALE_VALUE * Constants.QUIKTURN_TURN_SPEED_ADJUSTMENT);
 			}
-		}*/
+		}
 		
 		//applies the Constants.java deadband amounts to both throttle and wheel/rotation joystick
 		rotationalDriveSignal.applyDeadband(Constants.THROTTLE_DEADBAND, Constants.ROTATION_DEADBAND);
@@ -31,18 +31,6 @@ public class DrivePipeline {
 
 		//scales the joystick values to what we want them to be, adjusting speed
 		rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE);
-		
-		//limits the values of the drive to the limit specified in Constants.java
-		rotationalDriveSignal.limitValues((1 - (0.0 * Constants.SPEED_LIMIT_WHEN_LIFT_UP)) * Constants.SPEED_SCALE_VALUE);
-		//Change this value to lift height      ^^^ Change this when the lift subsystem can give us the number
-
-		if (leftButton || rightButton){
-			if (leftButton && !rightButton){
-				return rotationalDriveSignal.toDifferentialDriveSignal(-1, 1);
-			} else if (rightButton && !leftButton){
-				return rotationalDriveSignal.toDifferentialDriveSignal(1, -1);
-			}
-		}
 
 		//if no buttons are being pressed, convert as regular and return the signal
 		return rotationalDriveSignal.toDifferentialDriveSignal();

@@ -17,23 +17,30 @@ public class Drive {
 	private TalonSRX leftMasterTalon;
 	private TalonSRX rightMasterTalon;
 	
-	private VictorSPX leftSlave;
-	private VictorSPX rightSlave;
-	
+	private VictorSPX leftSlaveOne;
+	private VictorSPX leftSlaveTwo;
+	private VictorSPX rightSlaveOne;
+	private VictorSPX rightSlaveTwo;
+
 	private Drive() {
 		leftMasterTalon = new TalonSRX(Constants.LEFT_MASTER_TALON_PORT);
 		rightMasterTalon = new TalonSRX(Constants.RIGHT_MASTER_TALON_PORT);
 
-		leftSlave = new VictorSPX(Constants.LEFT_SLAVE_VICTOR_PORT);
-		rightSlave = new VictorSPX(Constants.RIGHT_SLAVE_VICTOR_PORT);
+		leftSlaveOne = new VictorSPX(Constants.LEFT_SLAVE_VICTOR_PORT_ONE);
+		leftSlaveTwo = new VictorSPX(Constants.LEFT_SLAVE_VICTOR_PORT_TWO);
+		rightSlaveOne = new VictorSPX(Constants.RIGHT_SLAVE_VICTOR_PORT_ONE);
+		rightSlaveTwo = new VictorSPX(Constants.RIGHT_SLAVE_VICTOR_PORT_TWO);
 		
 		leftMasterTalon = DriveTalonSRX.configure(leftMasterTalon);
 		rightMasterTalon = DriveTalonSRX.configure(rightMasterTalon);
 		rightMasterTalon.setInverted(true);
-		rightSlave.setInverted(true);
+		rightSlaveOne.setInverted(true);
+		rightSlaveTwo.setInverted(true);
 
-		leftSlave.follow(leftMasterTalon);
-		rightSlave.follow(rightMasterTalon);
+		leftSlaveOne.follow(leftMasterTalon);
+		leftSlaveTwo.follow(leftMasterTalon);
+		rightSlaveOne.follow(rightMasterTalon);
+		rightSlaveTwo.follow(rightMasterTalon);
 	}
 
 	/*public double getVelocity(){
@@ -42,14 +49,18 @@ public class Drive {
 	
 	public void set(DifferentialDriveSignal diffSignal) {
 		diffSignal.limitValues();
-		System.out.println("ERROR: " + leftMasterTalon.getClosedLoopError(0));
+		leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * 3600);
+		rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * 3600);
 		System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
-
-		leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * 6900);
-		rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * 6900);
-
+		//System.out.println("CalculatedTurningValue: " + (360 * ((diffSignal.getRightSide() * Constants.maximumTickSpeed * Constants.ticksToMetersConversionFactor) - (diffSignal.getLeftSide() * Constants.maximumTickSpeed * Constants.ticksToMetersConversionFactor))/Constants.distanceBetweenWheelsMeters));
 		//leftMasterTalon.set(ControlMode.PercentOutput, 0.1);
 		//rightMasterTalon.set(ControlMode.PercentOutput, 0.1);
+	}
+	public void set(int tickSpeed){
+		System.out.println("ERROR: " + leftMasterTalon.getClosedLoopError(0));
+		System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
+		leftMasterTalon.set(ControlMode.Velocity, tickSpeed);
+		rightMasterTalon.set(ControlMode.Velocity, tickSpeed);
 	}
 	public void brakeTalons(){
 		leftMasterTalon.setNeutralMode(NeutralMode.Brake);
