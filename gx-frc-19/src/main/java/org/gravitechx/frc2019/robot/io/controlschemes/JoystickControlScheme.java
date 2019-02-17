@@ -23,7 +23,10 @@ public class JoystickControlScheme {
 	
 	//get the wheel rotation value of the driver
 	public double getRotation() {
-		return oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_VALUE;
+		if (oneJoystick.getRawButton(2)){
+			return oneJoystick.getX() * 0.4;
+		}
+		return (getThrottle() >= 0) ? (oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_VALUE) : (-oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_VALUE);
 	}
 
 	public boolean getLeftSkrtTurn(){

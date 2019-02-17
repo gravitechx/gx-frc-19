@@ -27,6 +27,10 @@ public class Constants {
 	public static final double WHEEL_SENSITIVITY_VALUE = 2;
 	public static final double SINGLE_JOYSTICK_ROTATION_VALUE = 0.35;
 	public static final double QUIKTURN_TURN_SPEED_ADJUSTMENT = 0.35;
+
+	public static final double QUIKTURN_WEIGHT = 0.7;
+	public static final double QUIKTURN_SCALAR = 0.1;
+	
 	/**
 	 * This number (between 0 and 1), represents the reduced speed
 	 * of the robot when the lift is up. This number limits the speed
