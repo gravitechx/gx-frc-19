@@ -1,4 +1,6 @@
-package app;
+package org.gravitechx.frc2019.utils.autoutilities;
+
+import edu.wpi.first.wpilibj.Timer;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,18 +12,15 @@ public class AutoCSVReader {
     private double[] latestSetpoints, nextSetpoints;
     private double initialTime;
     public AutoCSVReader() throws FileNotFoundException, IOException{
-        br = new BufferedReader(new FileReader("C:\\Users\\FRC\\Desktop\\AutoSetpoints.txt"));
-        br.readLine();
-        latestSetpoints = stringsToDoubles(br.readLine().split(","));
-        nextSetpoints = stringsToDoubles(br.readLine().split(","));
+        resetReader();
     }
-    public double[] newSetpoints() throws FileNotFoundException, IOException{
+    public double[] getSetpoints() throws IOException{
         String line;
         if(initialTime == 0) {
-            initialTime = getFPGATime()/1000000.0;
+            initialTime = Timer.getFPGATimestamp();
         }
         if(!Arrays.equals(nextSetpoints,new double[]{})) {//If there's a possiblity that lastestSetpoints needs to be updated
-            if(getFPGATime()/1000000.0-initialTime >= nextSetpoints[0]) {//If it's time to start using nextSetpoints
+            while(Timer.getFPGATimestamp()-initialTime >= nextSetpoints[0]) {//If it's time to start using nextSetpoints
                 latestSetpoints = nextSetpoints;
                 if((line = br.readLine()) != null) {//If there's any more lines to read
                     nextSetpoints = stringsToDoubles(line.split(","));
@@ -30,6 +29,7 @@ public class AutoCSVReader {
                 }
             }
         }
+        System.out.println("TIME: " + (Timer.getFPGATimestamp()-initialTime));
         return Arrays.copyOfRange(latestSetpoints, 1, 5);
     }
     private double[] stringsToDoubles(String[] strArray) {
@@ -39,7 +39,11 @@ public class AutoCSVReader {
         }
         return result;
     }
-    private double getFPGATime() {
-        return 1;
+    public void resetReader() throws FileNotFoundException, IOException{
+        br = new BufferedReader(new FileReader("/home/admin/AutoSetpoints.txt"));
+        br.readLine();
+        latestSetpoints = stringsToDoubles(br.readLine().split(","));
+        nextSetpoints = stringsToDoubles(br.readLine().split(","));
+        initialTime = 0;
     }
 }
