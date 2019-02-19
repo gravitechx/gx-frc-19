@@ -62,6 +62,10 @@ public class Drive {
 		leftMasterTalon.set(ControlMode.Velocity, tickSpeed);
 		rightMasterTalon.set(ControlMode.Velocity, tickSpeed);
 	}
+	public void set(int leftTicks, int rightTicks){
+		leftMasterTalon.set(ControlMode.Velocity, leftTicks);
+		rightMasterTalon.set(ControlMode.Velocity, rightTicks);
+	}
 	public void brakeTalons(){
 		leftMasterTalon.setNeutralMode(NeutralMode.Brake);
 		rightMasterTalon.setNeutralMode(NeutralMode.Brake);
