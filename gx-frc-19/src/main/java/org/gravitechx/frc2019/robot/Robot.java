@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.SPI.Port;
 
 import java.io.PrintWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -131,8 +130,6 @@ public class Robot extends TimedRobot {
 		} catch (Exception e){
 			System.out.println("Autonomous cannot get setpoints. Periodically");
 		}
-		SmartDashboard.putNumber("big_chungus", drive.getAveragedSpeed());
-		System.out.println("LEFT: " + autonomousSetpoints[0] + " RIGHT: " + autonomousSetpoints[2]);
 		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
 	}
 
