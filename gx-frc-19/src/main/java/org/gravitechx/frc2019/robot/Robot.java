@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
 		try {
 			autoReader = new AutoCSVReader();
 		} catch (Exception e){
-			System.out.print("Ya stoopied. No setpoints for u");
+			System.out.print("No setpoints were provided.");
 		}
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
