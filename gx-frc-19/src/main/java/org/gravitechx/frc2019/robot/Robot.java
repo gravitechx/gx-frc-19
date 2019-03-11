@@ -8,6 +8,7 @@
 package org.gravitechx.frc2019.robot;
 
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
+import org.gravitechx.frc2019.utils.autoutilities.AutoCSVReader;
 import org.gravitechx.frc2019.robot.io.controlschemes.JoystickControlScheme;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
@@ -36,11 +37,13 @@ public class Robot extends TimedRobot {
 	public Drive drive;
 	public DrivePipeline pipe;
 	public AHRS gyro;
+	public AutoCSVReader autoReader;
 	Command m_autonomousCommand;
 	//SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public PrintWriter printWriter;
 	PowerDistributionPanel pdp = new PowerDistributionPanel(0);
 	double tinit;
+	double[] autonomousSetpoints;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -53,6 +56,11 @@ public class Robot extends TimedRobot {
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		gyro = new AHRS(Port.kMXP);
+		try {
+			autoReader = new AutoCSVReader();
+		} catch (Exception e){
+			System.out.print("No setpoints were provided.");
+		}
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		try {
@@ -91,6 +99,11 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		try {
+			autoReader.resetReader();
+		} catch (Exception e){
+			System.out.println("The setpoint reader refused to be reset.");
+		}
 		//m_autonomousCommand = m_chooser.getSelected();
 
 		/*
@@ -110,9 +123,14 @@ public class Robot extends TimedRobot {
 	 * This function is called periodically during autonomous.
 	 */
 	@Override
-	public void autonomousPeriodic() {
+	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
-		
+		try {
+			autonomousSetpoints = autoReader.getSetpoints();
+		} catch (Exception e){
+			System.out.println("Autonomous cannot get setpoints. Periodically");
+		}
+		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
 	}
 
 	@Override
@@ -159,7 +177,7 @@ public class Robot extends TimedRobot {
 		} else {
 			drive.brakeTalons();
 		}*/
-		drive.set(500);
+		drive.set(1000);
 	}
 	//8555.1049 ticks in a meter
 }

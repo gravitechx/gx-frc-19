@@ -76,15 +76,15 @@ public class Constants {
 	 public static final double kIntegral = 0.0000000000001000230050015;
 	 public static final double kDerivative = 0.1;*/
 
-	 /*public static final double kProportional = 0.18;
-	 public static final double kIntegral = 0;
-	 public static final double kDerivative = 0.0294;*/
+	 /*public static final double kProportional = 0.5;
+	 public static final double kIntegral = 0.00000001;
+	 public static final double kDerivative = 0.15;*/
 
-	 public static final double kProportional = 0.18;
-	 public static final double kIntegral = 0;
-	 public static final double kDerivative = 0.294;
+	 public static final double kProportional = 0.5;
+	 public static final double kIntegral = 0.00000001;
+	 public static final double kDerivative = 0.15;
 
-	 public static final double kFeedForward = 0.32;
+	 public static final double kFeedForward = 0.34;
 
 	 public static final int allowablePIDError = 20;
 }
