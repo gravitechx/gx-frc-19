@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		SmartDashboard.putNumber("big_chungus", drive.getAveragedSpeed());
+		SmartDashboard.putNumber("Average Speed", drive.getAveragedSpeed());
 		/* This is the two meter test
 		if (Timer.getFPGATimestamp()-tinit < 1){
 			drive.set((int)((Timer.getFPGATimestamp()-tinit) * 855.51049 * 2));
