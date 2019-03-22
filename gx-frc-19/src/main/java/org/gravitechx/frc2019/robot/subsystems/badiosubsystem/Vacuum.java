@@ -2,11 +2,8 @@
 package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import org.gravitechx.frc2019.robot.Constants;
-import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Vacuum {

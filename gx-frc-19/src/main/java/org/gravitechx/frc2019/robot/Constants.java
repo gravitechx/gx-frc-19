@@ -129,18 +129,6 @@ public class Constants {
     public static final int VACUUM_SOLENOID_FORWARDCHANNEL = 1;
     public static final int VACUUM_SOLENOID_REVERSECHANNEL = 2;
 
-    /*
-    //Ports for Right Solenoid 
-    public static final int RIGHT_SOLENOID_MODULENUMBER = 0;
-    public static final int RIGHT_SOLENOID_FORWARDCHANNEL = 0;
-    public static final int RIGHT_SOLENOID_REVERSECHANNEL = 0;
-
-    //Ports for Left Solenoid
-    public static final int LEFT_SOLENOID_MODULENUMBER = 0;
-    public static final int LEFT_SOLENOID_FORWARDCHANNEL = 0;
-    public static final int LEFT_SOLENOID_REVERSECHANNEL = 0;
-    */
-
     public static final VacuumPosition START_POSITION = VacuumPosition.UP;
 
     public static final double VACUUM_EXHALE_SPEED = 0.35;
