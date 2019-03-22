@@ -1,5 +1,10 @@
 package org.gravitechx.frc2019.robot;
 
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.VacuumPosition;
+
 public class Constants {
 	//these two port values are taken from gx-frc-18 github
 	public static final int THROTTLE_JOYSTICK_PORT = 1;
@@ -23,7 +28,7 @@ public class Constants {
 	 * of (2) would make maximum turn be at 1/2 the wheel turn, as it is
 	 * twice as sensitive.
 	 */
-	public static final double SPEED_SCALE_VALUE = 0.4;
+	public static final double SPEED_SCALE_VALUE = 0.6;
 	public static final double WHEEL_SENSITIVITY_VALUE = 2;
 	public static final double SINGLE_JOYSTICK_ROTATION_VALUE = 0.35;
 	public static final double QUIKTURN_TURN_SPEED_ADJUSTMENT = 0.35;
@@ -87,4 +92,89 @@ public class Constants {
 	 public static final double kFeedForward = 0.34;
 
 	 public static final int allowablePIDError = 20;
+
+
+
+
+
+
+
+//JOYSTICK STUFF
+    //Joystick Constants
+    public static final int ARM_JOYSTICK_PORT = 0;
+
+    public static final int BALL_HEIGHT_POSITION_BUTTON = 5;
+    public static final int SHUTTLE_SHOOTING_HEIGHT_POSITION_BUTTON = 3;
+    public static final int ROCKET_HEIGHT_POSITION_BUTTON = 4;
+    public static final int SHUTTLE_HEIGHT_POSITION_BUTTON = 6;
+
+    //Manual Controls
+    public static final int TOGGLE_ARM_CONTROL_TYPE_BUTTON = 7;
+    public static final int TOGGLE_VACUUM_POSITION_BUTTON = 8;
+    public static final int MANUAL_VACUUM_EXHALE_BUTTON = 9;
+    public static final int MANUAL_VACUUM_INHALE_BUTTON = 10;
+    public static final int MANUAL_HOLDER_EXHALE_BUTTON = 11;
+    public static final int MANUAL_HOLDER_INHALE_BUTTON = 12;
+
+
+
+
+    //VACUUM STUFF
+    //Vacuum Constants
+	public static final int LEFT_VACUUM_BIO_VICTOR_PORT = 6;
+	public static final int RIGHT_VACUUM_BIO_VICTOR_PORT = 0;
+
+    //Ports for Vacuum Solenoid
+    public static final int VACUUM_SOLENOID_MODULENUMBER = 0;
+    public static final int VACUUM_SOLENOID_FORWARDCHANNEL = 1;
+    public static final int VACUUM_SOLENOID_REVERSECHANNEL = 2;
+
+    public static final VacuumPosition START_POSITION = VacuumPosition.UP;
+
+    public static final double VACUUM_EXHALE_SPEED = 0.35;
+    public static final double VACUUM_INHALE_SPEED = -0.35;
+
+    //Position of Vacuum (up/down)
+    public static final DoubleSolenoid.Value VACUUM_UP = Value.kForward;
+    public static final DoubleSolenoid.Value VACUUM_DOWN = Value.kReverse;
+
+
+
+
+    //ARM STUFF
+    //Arm constants
+    //Motor output equal to that of Gravity
+    public static final double ZERO_RADIAN_ENCODER = -Math.PI / 2;
+
+    public static final int ARM_TALON_PORT = 2;
+    public static final int ARM_PID_ERROR = 100;
+    public static final int ARM_TALON_SENSOR_PORT = 0;
+    public static final int ARM_RIGHT_BIO_VICTOR_PORT = 7;
+    public static final int ARM_LEFT_BIO_VICTOR_PORT = 4;
+    public static final int GRIPPER_SOLENOID_MODULENUMBER = 0;
+    public static final int GRIPPER_SOLENOID_CHANNEL = 5;
+
+    
+    public static final double STEADY_STATE_VOLTAGE = .2; //0.05 0.20125;
+    public static final double RADIANS_PER_TICK = (Math.PI * 2)/(4096 / Constants.GEAR_RATIO);
+    public static final double GEAR_RATIO = 1/23.11;
+    //The position where the arm is perpendicular to Earth
+    public static final double MIDDLE_ARM_POSITION = (0.5 * Math.PI) / 2;
+
+    //DIMENSIONS = METERS
+    public static final double CHASIS_HEIGHT_M = .1;
+    public static final double ARM_RADIUS_M = .32;
+
+    //HEIGHTS IN METERS
+    public static final double BALL_HEIGHT_M = .1;
+    public static final double HATCH_HEIGHT_M = .48;
+    public static final double ROCKET_HEIGHT_M = .70;
+    public static final double SHUTTLE_HEIGHT_M = .27;
+
+    public static final double ARM_BIO_EXHALE_SPEED = 0.4;
+    public static final double ARM_BIO_INHALE_SPEED = -0.4;
+
+
+
+
 }
