@@ -171,20 +171,6 @@ public class Arm {
                     case MANUAL:
                         System.out.println("running = " + armJoystickMap.manualArmPosition.getOutput() * armJoystickMap.manualArmSensitivity);
                         
-                        //USING STEADY STATE VOLTAGE MANUALLY
-                        /*
-                        if (stateBH.radians >= Constants.MIDDLE_ARM_POSITION) {
-                            System.out.println("OPPOSITE POWER = " + new MotorSignal
-                            ((armJoystickMap.manualArmPosition.getOutput() * armJoystickMap.manualArmSensitivity) + stateBH.steadyStateVoltage).getOutput());
-                            
-                            armBH.getArmBH().set(ControlMode.PercentOutput, new MotorSignal
-                            ((armJoystickMap.manualArmPosition.getOutput() * armJoystickMap.manualArmSensitivity) + stateBH.steadyStateVoltage).getOutput());
-                        } else {
-                        armBH.getArmBH().set(ControlMode.PercentOutput, new MotorSignal
-                            ((armJoystickMap.manualArmPosition.getOutput() * armJoystickMap.manualArmSensitivity) + stateBH.steadyStateVoltage).getOutput());
-                        }
-                        */
-                        
                         //USING STEADY STATE VOLTAGE WITH THE WPILIB LIBRARY METHOD
 
                         armBH.getArmBH().set(ControlMode.PercentOutput, new MotorSignal
@@ -223,8 +209,7 @@ public class Arm {
                 
                 break;
             case UP:
-                //IMPORTANT: ROBOT'S STARTING POSITION MUST ALWAYS BE ARM DOWN, VACUUM UP/DOWN
-                //IMPORTANT: GET ARM BACK TO BALL POSITION (somehow.. idk yet)
+                //IMPORTANT: ROBOT'S STARTING POSITION MUST ALWAYS BE ARM DOWN, VACUUM DOWN
                 //armBH.setArmBHPositionPID(ButtonArmPosition.BALL);
                 //MAKE SURE ARM IS BACK IN BALL POSITION BEFORE BRINGING VACUUM UP
                 if (stateBH.currentState != stateBH.wantedState) {

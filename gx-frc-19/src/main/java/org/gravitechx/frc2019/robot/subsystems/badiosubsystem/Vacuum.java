@@ -15,12 +15,12 @@ public class Vacuum {
     //private DoubleSolenoid vacuumLeftSol;
     private WPI_VictorSPX vacuumBIO;
 
-    private Vacuum() {
+    //private Vacuum() {
         //vacuumSol = new DoubleSolenoid(Constants.VACUUM_SOLENOID_MODULENUMBER, Constants.VACUUM_SOLENOID_FORWARDCHANNEL, Constants.VACUUM_SOLENOID_REVERSECHANNEL);
         //vacuumRightSol = new DoubleSolenoid(Constants.RIGHT_SOLENOID_MODULENUMBER, Constants.RIGHT_SOLENOID_FORWARDCHANNEL, Constants.RIGHT_SOLENOID_REVERSECHANNEL);
         //vacuumLeftSol = new DoubleSolenoid(Constants.LEFT_SOLENOID_MODULENUMBER, Constants.LEFT_SOLENOID_FORWARDCHANNEL, Constants.LEFT_SOLENOID_REVERSECHANNEL);
         //vacuumBIO = new WPI_VictorSPX(Constants.VACUUM_BIO_VICTOR_PORT);
-    }
+    //}
 
     public static Vacuum getVacuumInstance() {
         return instance;
