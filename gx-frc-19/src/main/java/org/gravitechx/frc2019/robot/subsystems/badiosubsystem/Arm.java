@@ -17,10 +17,8 @@ import edu.wpi.first.wpilibj.Solenoid;
 import org.gravitechx.frc2019.robot.subsystems.badiosubsystem.Vacuum;
 
 public class Arm {
-
     
-    private static Arm instance = new Arm();
-
+    private static Arm instance = new Arm()
     private Vacuum vacuum;
     private BallHolderState stateBH;
     private BallHolder armBH;
@@ -31,11 +29,12 @@ public class Arm {
         private WPI_VictorSPX rightArmBIO = new WPI_VictorSPX(Constants.ARM_RIGHT_BIO_VICTOR_PORT);
         private WPI_VictorSPX leftArmBIO = new WPI_VictorSPX(Constants.ARM_LEFT_BIO_VICTOR_PORT);
         private Solenoid gripperSolenoid = new Solenoid(Constants.GRIPPER_SOLENOID_MODULENUMBER, Constants.GRIPPER_SOLENOID_CHANNEL);
+       
 
         public BallHolder() {
-            armBH.config_kP(0, .024);  //.025
+            armBH.config_kP(0, .023);  //.025
             armBH.config_kI(0, 0);
-            armBH.config_kD(0, 1.2025);      //1
+            armBH.config_kD(0, 1.26);      //1
             armBH.config_kF(0, 0);
             armBH.configAllowableClosedloopError(0, Constants.ARM_PID_ERROR);
             armBH.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
@@ -106,6 +105,7 @@ public class Arm {
 
         public VacuumPosition wantedState;
         public VacuumPosition currentState = VacuumPosition.UP;
+        public boolean gripperState = false;
 
         public double setPoint = 0;
 
@@ -157,13 +157,22 @@ public class Arm {
     public void armPerception() {
         stateBH.encoder_ticks = armBH.getArmBH().getSelectedSensorPosition();
         stateBH.radians = stateBH.encoder_ticks * Constants.RADIANS_PER_TICK;
-        stateBH.steadyStateVoltage = 0 * Constants.STEADY_STATE_VOLTAGE * Math.cos(stateBH.radians);
+        stateBH.steadyStateVoltage = Constants.STEADY_STATE_VOLTAGE * Math.cos(stateBH.radians);
     }
 
     public void armAction(ArmJoystickMap armJoystickMap) {
-        armBH.getGripperSolenoid().set(true);
+        wantedState = armJoystickMap.vacuumPosition;
+        if (stateBH.gripperState == false) {
+            armBH.getGripperSolenoid().set(true);
+            stateBH.gripperState = true;
+        }
         switch(armJoystickMap.vacuumPosition) {
             case DOWN:
+                System.out.println("GRIPPER DOWN");
+                if (stateBH.currentState != stateBH.wantedState) {
+                    vacuum.setSolenoid(Constants.VACUUM_DOWN);
+                    currentState = VacuumPosition.DOWN;
+                }
                 System.out.println("Vacuum DOWN");
                 System.out.println(armJoystickMap.armControlType);
                 //Controls Arm Position
@@ -192,9 +201,9 @@ public class Arm {
                 if (armJoystickMap.manualHolderBIO == IntakeState.NEUTRAL && armJoystickMap.manualVacuumBIO == IntakeState.NEUTRAL) {
                     switch (armJoystickMap.automaticBIO) {
                         case INHALE:
-                                System.out.println("WORKING YET???");
-                                vacuum.setVacuumBIO(IntakeState.INHALE);
-                                armBH.setBIOState(IntakeState.INHALE);
+                            System.out.println("WORKING YET???");
+                            vacuum.setVacuumBIO(IntakeState.INHALE);
+                            armBH.setBIOState(IntakeState.INHALE);
                             break;
                         case NEUTRAL: 
                             vacuum.setVacuumBIO(IntakeState.NEUTRAL);
@@ -215,6 +224,7 @@ public class Arm {
                 if (stateBH.currentState != stateBH.wantedState) {
                     if (true) { //if Arm is in ball position, execute below
                         vacuum.setSolenoid(Constants.VACUUM_UP);
+                        currentState = vacuumPosition.UP;
                         //System.out.println("Vacuum UP");
                     }
     

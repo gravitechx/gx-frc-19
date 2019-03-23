@@ -110,8 +110,10 @@ public class ArmControlScheme {
          if (joystick.getRawButtonPressed(Constants.TOGGLE_VACUUM_POSITION_BUTTON)) {
             if (armJoystickMap.vacuumPosition == VacuumPosition.DOWN) {
                 armJoystickMap.vacuumPosition = VacuumPosition.UP;
+                System.out.println("Vacuum UP");
             } else {
                 armJoystickMap.vacuumPosition = VacuumPosition.DOWN;
+                System.out.println("Vacuum DOWN");
             }
         }
 
@@ -159,7 +161,7 @@ public class ArmControlScheme {
 
         //Manual Vacuum Intake State
         if (joystick.getRawButton(Constants.MANUAL_VACUUM_INHALE_BUTTON)) {
-            armJoystickMap.manualVacuumBIO = IntakeState.INHALE; 
+            armJoystickMap.manualVacuumBIO = IntakeState.INHALE;
             armJoystickMap.automaticBIO = IntakeState.NEUTRAL;
         } else if (joystick.getRawButton(Constants.MANUAL_VACUUM_EXHALE_BUTTON)) {
             armJoystickMap.manualVacuumBIO = IntakeState.EXHALE;

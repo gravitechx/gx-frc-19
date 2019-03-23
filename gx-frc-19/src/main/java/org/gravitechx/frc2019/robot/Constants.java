@@ -155,7 +155,7 @@ public class Constants {
     public static final int GRIPPER_SOLENOID_CHANNEL = 5;
 
     
-    public static final double STEADY_STATE_VOLTAGE = .2; //0.05 0.20125;
+    public static final double STEADY_STATE_VOLTAGE = .20005; //0.05 0.20125;
     public static final double RADIANS_PER_TICK = (Math.PI * 2)/(4096 / Constants.GEAR_RATIO);
     public static final double GEAR_RATIO = 1/23.11;
     //The position where the arm is perpendicular to Earth
@@ -171,7 +171,7 @@ public class Constants {
     public static final double ROCKET_HEIGHT_M = .70;
     public static final double SHUTTLE_HEIGHT_M = .27;
 
-    public static final double ARM_BIO_EXHALE_SPEED = 0.4;
+    public static final double ARM_BIO_EXHALE_SPEED = 0.6;
     public static final double ARM_BIO_INHALE_SPEED = -0.4;
 
 

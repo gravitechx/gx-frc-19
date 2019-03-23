@@ -132,11 +132,12 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
-		if (Timer.getFPGATimestamp()-tinit < 1.5){
+		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
+		/*if (Timer.getFPGATimestamp()-tinit < 1.5){
 			drive.set(1000);
 		} else {
 			drive.set(0);
-		}
+		}*/
 		/*try {
 			autonomousSetpoints = autoReader.getSetpoints();
 		} catch (Exception e){
