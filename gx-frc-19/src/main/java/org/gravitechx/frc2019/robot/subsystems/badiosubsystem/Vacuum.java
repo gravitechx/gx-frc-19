@@ -3,17 +3,16 @@ package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Vacuum {
 
     private static Vacuum instance = new Vacuum();
 
-    private DoubleSolenoid vacuumSol;
+    //private DoubleSolenoid vacuumSol;
+    //private WPI_VictorSPX vacuumBIO;
     //private DoubleSolenoid vacuumRightSol;
     //private DoubleSolenoid vacuumLeftSol;
-    private WPI_VictorSPX vacuumBIO;
 
     //private Vacuum() {
         //vacuumSol = new DoubleSolenoid(Constants.VACUUM_SOLENOID_MODULENUMBER, Constants.VACUUM_SOLENOID_FORWARDCHANNEL, Constants.VACUUM_SOLENOID_REVERSECHANNEL);
