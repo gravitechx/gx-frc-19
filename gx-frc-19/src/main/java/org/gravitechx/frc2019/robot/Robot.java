@@ -8,7 +8,10 @@
 package org.gravitechx.frc2019.robot;
 
 import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
+import org.gravitechx.frc2019.utils.autoutilities.AutoCSVReader;
+import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme;
 import org.gravitechx.frc2019.robot.io.controlschemes.JoystickControlScheme;
+import org.gravitechx.frc2019.robot.subsystems.badiosubsystem.Arm;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
@@ -36,11 +39,15 @@ public class Robot extends TimedRobot {
 	public Drive drive;
 	public DrivePipeline pipe;
 	public AHRS gyro;
+	public AutoCSVReader autoReader;
 	Command m_autonomousCommand;
 	//SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public PrintWriter printWriter;
 	PowerDistributionPanel pdp = new PowerDistributionPanel(0);
 	double tinit;
+	double[] autonomousSetpoints;
+	Arm arm;
+  	ArmControlScheme armControlScheme;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -53,6 +60,13 @@ public class Robot extends TimedRobot {
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		gyro = new AHRS(Port.kMXP);
+		arm = Arm.getArmInstance();
+		armControlScheme = ArmControlScheme.getControlSchemeInstance();
+		try {
+			autoReader = new AutoCSVReader();
+		} catch (Exception e){
+			System.out.print("No setpoints were provided.");
+		}
 		//m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		try {
@@ -91,6 +105,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		tinit = Timer.getFPGATimestamp();
+		/*try {
+			autoReader.resetReader();
+		} catch (Exception e){
+			System.out.println("The setpoint reader refused to be reset.");
+		}*/
 		//m_autonomousCommand = m_chooser.getSelected();
 
 		/*
@@ -110,9 +130,20 @@ public class Robot extends TimedRobot {
 	 * This function is called periodically during autonomous.
 	 */
 	@Override
-	public void autonomousPeriodic() {
+	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
-		
+		if (Timer.getFPGATimestamp()-tinit < 1.5){
+			drive.set(1000);
+		} else {
+			drive.set(0);
+		}
+		/*try {
+			autonomousSetpoints = autoReader.getSetpoints();
+		} catch (Exception e){
+			System.out.println("Autonomous cannot get setpoints. Periodically");
+		}
+		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
+		*/
 	}
 
 	@Override
@@ -135,6 +166,9 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
 		Scheduler.getInstance().run();
+		arm.armPerception();
+    	armControlScheme.updateButtonMap();
+    	arm.armAction(armControlScheme.getArmJoystickMap());
 		//System.out.println("RegisteredTurningValue: " + gyro.getRawGyroY());
 		//printWriter.append(Timer.getFPGATimestamp() + ", " + drive.getVelocity() + "\n");
 	}
@@ -159,7 +193,7 @@ public class Robot extends TimedRobot {
 		} else {
 			drive.brakeTalons();
 		}*/
-		drive.set(500);
+		drive.set(1000);
 	}
 	//8555.1049 ticks in a meter
 }
