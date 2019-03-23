@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
-package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
-
-/**
- * Add your docs here.
- */
-public class Arm {
-=======
 
 package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
 
@@ -121,6 +106,7 @@ public class Arm {
 
         public VacuumPosition wantedState;
         public VacuumPosition currentState = VacuumPosition.UP;
+        public boolean gripperState = false;
 
         public double setPoint = 0;
 
@@ -176,9 +162,17 @@ public class Arm {
     }
 
     public void armAction(ArmJoystickMap armJoystickMap) {
-        armBH.getGripperSolenoid().set(true);
+        wantedState = armJoystickMap.vacuumPosition;
+        if (stateBH.gripperState == false) {
+            armBH.getGripperSolenoid().set(true);
+            stateBH.gripperState = true;
+        }
         switch(armJoystickMap.vacuumPosition) {
             case DOWN:
+                if (stateBH.currentState != stateBH.wantedState) {
+                    vacuum.setSolenoid(Constants.VACUUM_DOWN);
+                    currentState = VacuumPosition.DOWN;
+                }
                 System.out.println("Vacuum DOWN");
                 System.out.println(armJoystickMap.armControlType);
                 //Controls Arm Position
@@ -207,9 +201,9 @@ public class Arm {
                 if (armJoystickMap.manualHolderBIO == IntakeState.NEUTRAL && armJoystickMap.manualVacuumBIO == IntakeState.NEUTRAL) {
                     switch (armJoystickMap.automaticBIO) {
                         case INHALE:
-                                System.out.println("WORKING YET???");
-                                vacuum.setVacuumBIO(IntakeState.INHALE);
-                                armBH.setBIOState(IntakeState.INHALE);
+                            System.out.println("WORKING YET???");
+                            vacuum.setVacuumBIO(IntakeState.INHALE);
+                            armBH.setBIOState(IntakeState.INHALE);
                             break;
                         case NEUTRAL: 
                             vacuum.setVacuumBIO(IntakeState.NEUTRAL);
@@ -230,6 +224,7 @@ public class Arm {
                 if (stateBH.currentState != stateBH.wantedState) {
                     if (true) { //if Arm is in ball position, execute below
                         vacuum.setSolenoid(Constants.VACUUM_UP);
+                        currentState = vacuumPosition.UP;
                         //System.out.println("Vacuum UP");
                     }
     
@@ -262,5 +257,4 @@ public class Arm {
         armBH.setArmBHPositionPID(ButtonArmPosition.HATCH, stateBH);
     }
 
->>>>>>> 6a9c4027a8a42fc68d111dc8d179a43ef567d429
 }

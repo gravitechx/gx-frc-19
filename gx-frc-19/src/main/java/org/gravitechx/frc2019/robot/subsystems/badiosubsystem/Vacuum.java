@@ -1,24 +1,9 @@
-<<<<<<< HEAD
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
-package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
-
-/**
- * Add your docs here.
- */
-public class Vacuum {
-}
-=======
 
 package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
+import org.gravitechx.frc2019.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -27,43 +12,39 @@ public class Vacuum {
     private static Vacuum instance = new Vacuum();
 
     private DoubleSolenoid vacuumSol;
-    //private DoubleSolenoid vacuumRightSol;
-    //private DoubleSolenoid vacuumLeftSol;
-    private WPI_VictorSPX vacuumBIO;
+    private WPI_VictorSPX leftVacuumBIO;
+    private WPI_VictorSPX rightVacuumBIO;
 
-    //private Vacuum() {
-        //vacuumSol = new DoubleSolenoid(Constants.VACUUM_SOLENOID_MODULENUMBER, Constants.VACUUM_SOLENOID_FORWARDCHANNEL, Constants.VACUUM_SOLENOID_REVERSECHANNEL);
-        //vacuumRightSol = new DoubleSolenoid(Constants.RIGHT_SOLENOID_MODULENUMBER, Constants.RIGHT_SOLENOID_FORWARDCHANNEL, Constants.RIGHT_SOLENOID_REVERSECHANNEL);
-        //vacuumLeftSol = new DoubleSolenoid(Constants.LEFT_SOLENOID_MODULENUMBER, Constants.LEFT_SOLENOID_FORWARDCHANNEL, Constants.LEFT_SOLENOID_REVERSECHANNEL);
-        //vacuumBIO = new WPI_VictorSPX(Constants.VACUUM_BIO_VICTOR_PORT);
-    //}
+    private Vacuum() {
+        vacuumSol = new DoubleSolenoid(Constants.VACUUM_SOLENOID_MODULENUMBER, Constants.VACUUM_SOLENOID_FORWARDCHANNEL, Constants.VACUUM_SOLENOID_REVERSECHANNEL);
+        leftVacuumBIO = new WPI_VictorSPX(Constants.LEFT_VACUUM_BIO_VICTOR_PORT);
+        rightVacuumBIO = new WPI_VictorSPX(Constants.RIGHT_VACUUM_BIO_VICTOR_PORT);
+        rightVacuumBIO.setInverted(true);
+    }
 
     public static Vacuum getVacuumInstance() {
         return instance;
     }
 
     public void setSolenoid(DoubleSolenoid.Value position) {
-       // vacuumSol.set(position);
-        //vacuumRightSol.set(position);
-        //vacuumLeftSol.set(position);
+       vacuumSol.set(position);
     }
     
     public void setVacuumBIO(IntakeState intakeState) {
         switch(intakeState) {
             case INHALE: 
-                System.out.println("Vacuum Intake State = INHALE");
-                //vacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_INHALE_SPEED);
+                leftVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_INHALE_SPEED);
+                rightVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_INHALE_SPEED);
                 break;
             case NEUTRAL:
-            System.out.println("Vacuum Intake State = NEUTRAL");
-                //vacuumBIO.set(ControlMode.PercentOutput, 0);
+                leftVacuumBIO.set(ControlMode.PercentOutput, 0);
+                rightVacuumBIO.set(ControlMode.PercentOutput, 0);
                 break;
             case EXHALE:
-                System.out.println("Vacuum Intake State = EXHALE");
-                //vacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_EXHALE_SPEED);
+                leftVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_EXHALE_SPEED);
+                rightVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_EXHALE_SPEED);
                 break;
         }
     }
 
 }
->>>>>>> 6a9c4027a8a42fc68d111dc8d179a43ef567d429
