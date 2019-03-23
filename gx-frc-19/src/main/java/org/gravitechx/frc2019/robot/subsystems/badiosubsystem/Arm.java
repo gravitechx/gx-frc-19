@@ -105,6 +105,7 @@ public class Arm {
 
         public VacuumPosition wantedState;
         public VacuumPosition currentState = VacuumPosition.UP;
+        public boolean gripperState = false;
 
         public double setPoint = 0;
 
@@ -160,10 +161,19 @@ public class Arm {
     }
 
     public void armAction(ArmJoystickMap armJoystickMap) {
-        armBH.getGripperSolenoid().set(true);
+        wantedState = armJoystickMap.vacuumPosition;
+        if (stateBH.gripperState == false) {
+            armBH.getGripperSolenoid().set(true);
+            stateBH.gripperState = true;
+        }
         switch(armJoystickMap.vacuumPosition) {
             case DOWN:
                 System.out.println("GRIPPER DOWN");
+                if (stateBH.currentState != stateBH.wantedState) {
+                    vacuum.setSolenoid(Constants.VACUUM_DOWN);
+                    currentState = VacuumPosition.DOWN;
+                }
+                System.out.println("Vacuum DOWN");
                 System.out.println(armJoystickMap.armControlType);
                 //Controls Arm Position
                 switch(armJoystickMap.armControlType) {
@@ -191,9 +201,9 @@ public class Arm {
                 if (armJoystickMap.manualHolderBIO == IntakeState.NEUTRAL && armJoystickMap.manualVacuumBIO == IntakeState.NEUTRAL) {
                     switch (armJoystickMap.automaticBIO) {
                         case INHALE:
-                                System.out.println("WORKING YET???");
-                                vacuum.setVacuumBIO(IntakeState.INHALE);
-                                armBH.setBIOState(IntakeState.INHALE);
+                            System.out.println("WORKING YET???");
+                            vacuum.setVacuumBIO(IntakeState.INHALE);
+                            armBH.setBIOState(IntakeState.INHALE);
                             break;
                         case NEUTRAL: 
                             vacuum.setVacuumBIO(IntakeState.NEUTRAL);
@@ -214,6 +224,7 @@ public class Arm {
                 if (stateBH.currentState != stateBH.wantedState) {
                     if (true) { //if Arm is in ball position, execute below
                         vacuum.setSolenoid(Constants.VACUUM_UP);
+                        currentState = vacuumPosition.UP;
                         //System.out.println("Vacuum UP");
                     }
     
