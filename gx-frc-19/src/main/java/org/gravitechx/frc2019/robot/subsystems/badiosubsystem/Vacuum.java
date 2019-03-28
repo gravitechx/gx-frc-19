@@ -1,9 +1,13 @@
-
 package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
+import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
 import org.gravitechx.frc2019.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Vacuum {
@@ -25,8 +29,17 @@ public class Vacuum {
         return instance;
     }
 
+    public void setAutonSolenoid(VacuumPosition position) {
+        ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().vacuumPosition = position;
+    }
+
     public void setSolenoid(DoubleSolenoid.Value position) {
-       vacuumSol.set(position);
+        if (position.equals(Value.kReverse)) {
+            ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().vacuumPosition = VacuumPosition.DOWN;
+        } else if (position.equals(Value.kForward)) {
+            ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().vacuumPosition = VacuumPosition.UP;
+        }
+        vacuumSol.set(position);
     }
     
     public void setVacuumBIO(IntakeState intakeState) {

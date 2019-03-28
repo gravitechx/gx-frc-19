@@ -13,17 +13,10 @@ public class DriveTalonSRX {
         talon.configAllowableClosedloopError(0, Constants.allowablePIDError);
         //talon.configSelectedFeedbackSensor();
         //talon.configNominalOutputForward();
-        if (Constants.allowPIDValues){
-            talon.config_kP(0, Constants.kProportional);
-            talon.config_kI(0, Constants.kIntegral);
-            talon.config_kD(0, Constants.kDerivative);
-            talon.config_kF(0, Constants.kFeedForward);
-        } else {
-            talon.config_kP(0, 0);
-            talon.config_kI(0, 0);
-            talon.config_kD(0, 0);
-            talon.config_kF(0, 0);
-        }
+        talon.config_kP(0, Constants.kProportional);
+        talon.config_kI(0, Constants.kIntegral);
+        talon.config_kD(0, Constants.kDerivative);
+        talon.config_kF(0, Constants.kFeedForward);
         return talon;
     }
 }

@@ -1,6 +1,5 @@
 package org.gravitechx.frc2019.robot;
 
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.VacuumPosition;
@@ -30,11 +29,7 @@ public class Constants {
 	 */
 	public static final double SPEED_SCALE_VALUE = 0.6;
 	public static final double WHEEL_SENSITIVITY_VALUE = 2;
-	public static final double SINGLE_JOYSTICK_ROTATION_VALUE = 0.35;
-	public static final double QUIKTURN_TURN_SPEED_ADJUSTMENT = 0.35;
-
-	public static final double QUIKTURN_WEIGHT = 0.7;
-	public static final double QUIKTURN_SCALAR = 0.1;
+	public static final double SINGLE_JOYSTICK_ROTATION_SCALE_VALUE = 0.35;
 	
 	/**
 	 * This number (between 0 and 1), represents the reduced speed
@@ -68,18 +63,15 @@ public class Constants {
 	
 	public static final boolean THROTTLE_IS_REVERSED = true;
 
-	public static final double distanceBetweenWheelsMeters = 0.705;
-	public static final double ticksToMetersConversionFactor = 0.0000118433895692033811661265341759;
-	public static final double maximumTickSpeed = 6900;
+	public static final double MAXIMUM_DRIVE_SPEED_TICKS = 6900;
+
 	/**
 	 * PID Controllers
 	 */
 
 	 //Drive PID Settings
-	 public static final boolean allowPIDValues = true;
-	 /*public static final double kProportional = 0.08;
-	 public static final double kIntegral = 0.0000000000001000230050015;
-	 public static final double kDerivative = 0.1;*/
+
+	public static final boolean CLOSED_LOOP = true;
 
 	 /*public static final double kProportional = 0.5;
 	 public static final double kIntegral = 0.00000001;
@@ -99,7 +91,7 @@ public class Constants {
 
 
 
-//JOYSTICK STUFF
+	//JOYSTICK STUFF
     //Joystick Constants
     public static final int ARM_JOYSTICK_PORT = 0;
 
@@ -114,7 +106,8 @@ public class Constants {
     public static final int MANUAL_VACUUM_EXHALE_BUTTON = 9;
     public static final int MANUAL_VACUUM_INHALE_BUTTON = 10;
     public static final int MANUAL_HOLDER_EXHALE_BUTTON = 11;
-    public static final int MANUAL_HOLDER_INHALE_BUTTON = 12;
+	public static final int MANUAL_HOLDER_INHALE_BUTTON = 12;
+	public static final int TOGGLE_PANCAKE = 2;
 
 
 
@@ -123,12 +116,11 @@ public class Constants {
     //Vacuum Constants
 	public static final int LEFT_VACUUM_BIO_VICTOR_PORT = 6;
 	public static final int RIGHT_VACUUM_BIO_VICTOR_PORT = 0;
-
     //Ports for Vacuum Solenoid
     public static final int VACUUM_SOLENOID_MODULENUMBER = 0;
     public static final int VACUUM_SOLENOID_FORWARDCHANNEL = 1;
     public static final int VACUUM_SOLENOID_REVERSECHANNEL = 2;
-
+	
     public static final VacuumPosition START_POSITION = VacuumPosition.UP;
 
     public static final double VACUUM_EXHALE_SPEED = 0.35;
@@ -137,6 +129,7 @@ public class Constants {
     //Position of Vacuum (up/down)
     public static final DoubleSolenoid.Value VACUUM_UP = Value.kForward;
     public static final DoubleSolenoid.Value VACUUM_DOWN = Value.kReverse;
+
 
 
 
@@ -155,7 +148,7 @@ public class Constants {
     public static final int GRIPPER_SOLENOID_CHANNEL = 5;
 
     
-    public static final double STEADY_STATE_VOLTAGE = .20005; //0.05 0.20125;
+    public static final double STEADY_STATE_VOLTAGE = 0.05; //.20005; //0.05 0.20125;
     public static final double RADIANS_PER_TICK = (Math.PI * 2)/(4096 / Constants.GEAR_RATIO);
     public static final double GEAR_RATIO = 1/23.11;
     //The position where the arm is perpendicular to Earth
@@ -167,14 +160,23 @@ public class Constants {
 
     //HEIGHTS IN METERS
     public static final double BALL_HEIGHT_M = .1;
-    public static final double HATCH_HEIGHT_M = .48;
+    public static final double CARGO_BAY_HEIGHT_M = .52;
     public static final double ROCKET_HEIGHT_M = .70;
     public static final double SHUTTLE_HEIGHT_M = .27;
 
     public static final double ARM_BIO_EXHALE_SPEED = 0.6;
-    public static final double ARM_BIO_INHALE_SPEED = -0.4;
+	public static final double ARM_BIO_INHALE_SPEED = -0.4;
+	
 
 
 
+	//PANCAKE STUFF
+	//Pancake Constants
+	public static final int PANCAKE_SOLENOID_MODULENUMBER = 0;
+	public static final int PANCAKE_SOLENOID_FORWARDCHANNEL = 0;
+	public static final int PANCAKE_SOLENOID_REVERSECHANNEL = 0;
 
+	//Pancake in is holding the disk
+	public static final DoubleSolenoid.Value PANCAKE_IN = Value.kReverse;
+	public static final DoubleSolenoid.Value PANCAKE_OUT = Value.kForward;
 }
