@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 import java.io.PrintWriter;
@@ -40,6 +38,7 @@ public class Robot extends TimedRobot {
 	public DrivePipeline pipe;
 	public AHRS gyro;
 	public AutoCSVReader autoReader;
+	//public DoubleSolenoid thing;
 	Command m_autonomousCommand;
 	//SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public PrintWriter printWriter;
@@ -47,7 +46,9 @@ public class Robot extends TimedRobot {
 	double tinit;
 	double[] autonomousSetpoints;
 	Arm arm;
-  	ArmControlScheme armControlScheme;
+	ArmControlScheme armControlScheme;
+	//Vacuum vacuum = Vacuum.getVacuumInstance();
+
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot {
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		gyro = new AHRS(Port.kMXP);
+		//thing = new DoubleSolenoid(0, 1, 2);
 		arm = Arm.getArmInstance();
 		armControlScheme = ArmControlScheme.getControlSchemeInstance();
 		try {
@@ -105,10 +107,11 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		tinit = Timer.getFPGATimestamp();
+		//tinit = Timer.getFPGATimestamp();
 		/*try {
 			autoReader.resetReader();
 		} catch (Exception e){
+			System.out.println(e);
 			System.out.println("The setpoint reader refused to be reset.");
 		}*/
 		//m_autonomousCommand = m_chooser.getSelected();
@@ -133,18 +136,44 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
 		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
+
+
+
+		// AUTONOMOUS METHODS THAT SHOULD WORK FOR ARM AUTON
+		
+		/*
+		//SET THE VACUUM TO DOWN BEFORE MOVING THE ARM TO AVOID COLLISIONS
+		arm.setAutonVacuumPosition(VacuumPosition.DOWN);
+
+		//setAutonPosition and setIntakePosition sets the points, and armAction method will 
+		//execute them. armPerception is needed for keeping the arm in it's setPosition.
+
+		//ButtonArmPosition.CARGOBAY is the shooting height for cargo bay (haven't been able to fine-tune yet)
+		arm.setAutonPosition(ButtonArmPosition.CARGOBAY);
+
+		arm.setAutonIntakeState(IntakeState.EXHALE);
+
+		//No idea if IN is actually holding the disks IN... will test when possible
+		arm.setAutonPancakePosition(PancakeIntakePosition.IN);
+
+		arm.armAction(armControlScheme.getArmJoystickMap());
+		arm.armPerception();
+		/*
+
+
+
 		/*if (Timer.getFPGATimestamp()-tinit < 1.5){
 			drive.set(1000);
 		} else {
 			drive.set(0);
 		}*/
 		/*try {
-			autonomousSetpoints = autoReader.getSetpoints();
+			double[] currents = {pdp.getCurrent(Constants.LEFT_MASTER_TALON_PORT), pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_ONE), pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_TWO), pdp.getCurrent(Constants.RIGHT_MASTER_TALON_PORT), pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_ONE), pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_TWO)};
+			autonomousSetpoints = autoReader.getSetpoints(drive.getLeftVelocityTicks(), drive.getRightVelocityTicks(), currents);
 		} catch (Exception e){
 			System.out.println("Autonomous cannot get setpoints. Periodically");
 		}
-		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
-		*/
+		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));*/
 	}
 
 	@Override
@@ -167,17 +196,25 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
 		Scheduler.getInstance().run();
+		//System.out.println("running?");
+		
+		//vacuum.setSolenoid(Value.kForward);
+		
 		arm.armPerception();
     	armControlScheme.updateButtonMap();
-    	arm.armAction(armControlScheme.getArmJoystickMap());
+		arm.armAction(armControlScheme.getArmJoystickMap());
+		
 		//System.out.println("RegisteredTurningValue: " + gyro.getRawGyroY());
 		//printWriter.append(Timer.getFPGATimestamp() + ", " + drive.getVelocity() + "\n");
 	}
 	
 	@Override
 	public void testInit() {
-		tinit = Timer.getFPGATimestamp();
-		drive.coastTalons();
+		try {
+			autoReader.resetReader();
+		} catch (Exception e){
+			System.out.println("The setpoint reader refused to be reset.");
+		}
 	}
 
 	/**
@@ -185,16 +222,14 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		SmartDashboard.putNumber("Average Speed", drive.getAveragedSpeed());
-		/* This is the two meter test
-		if (Timer.getFPGATimestamp()-tinit < 1){
-			drive.set((int)((Timer.getFPGATimestamp()-tinit) * 855.51049 * 2));
-		} else if (Timer.getFPGATimestamp()-tinit < 2) {
-			drive.set((int)(((Timer.getFPGATimestamp()-tinit) * -2 + 4) * 855.51049 ));
-		} else {
-			drive.brakeTalons();
-		}*/
-		drive.set(1000);
+		System.out.println("LEFT: " + drive.getLeftVelocityTicks() + " RIGHT: " + drive.getRightVelocityTicks() + " \nLEFT CURRENT: " + ((pdp.getCurrent(Constants.LEFT_MASTER_TALON_PORT) + pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_ONE) + pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_TWO))/3) + " RIGHT CURRENT: " + ((pdp.getCurrent(Constants.RIGHT_MASTER_TALON_PORT) + pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_ONE) + pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_TWO))/3));
+		try {
+			double[] currents = {pdp.getCurrent(Constants.LEFT_MASTER_TALON_PORT), pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_ONE), pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_TWO), pdp.getCurrent(Constants.RIGHT_MASTER_TALON_PORT), pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_ONE), pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_TWO)};
+			autonomousSetpoints = autoReader.getSetpoints(drive.getLeftVelocityTicks(), drive.getRightVelocityTicks(), currents);
+		} catch (Exception e){
+			System.out.println("Autonomous cannot get setpoints. Periodically");
+		}
+		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
 	}
 	//8555.1049 ticks in a meter
 }

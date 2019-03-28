@@ -57,25 +57,28 @@ public class ArmControlScheme {
         }
 
         //Arm Control and Arm Position
-        public ArmControlType armControlType = ArmControlType.MANUAL;
+        public ArmControlType armControlType = ArmControlType.BUTTONS;
         public ButtonArmPosition buttonArmPosition = ButtonArmPosition.BALL;
         public MotorSignal manualArmPosition = new MotorSignal(0);
         public double manualArmSensitivity = 0;
-
         //Intake States
         public IntakeState automaticBIO = IntakeState.NEUTRAL;
         public IntakeState manualHolderBIO = IntakeState.NEUTRAL;
         public IntakeState manualVacuumBIO = IntakeState.NEUTRAL;
-
         //Vacuum Position
         public VacuumPosition vacuumPosition = VacuumPosition.UP;
+        //Pancake Intake States 
+        public PancakeIntakePosition pancakeIntakePosition = PancakeIntakePosition.OUT;
 
+        public enum PancakeIntakePosition {
+            OUT, IN;
+        }
         public enum VacuumPosition {
             UP, DOWN;
         }
         
         public enum ButtonArmPosition {
-            BALL, HATCH, ROCKET, SHUTTLE;
+            BALL, CARGOBAY, ROCKET, SHUTTLE;
         }
 
         public enum ArmControlType {
@@ -110,14 +113,12 @@ public class ArmControlScheme {
          if (joystick.getRawButtonPressed(Constants.TOGGLE_VACUUM_POSITION_BUTTON)) {
             if (armJoystickMap.vacuumPosition == VacuumPosition.DOWN) {
                 armJoystickMap.vacuumPosition = VacuumPosition.UP;
-                System.out.println("Vacuum UP");
             } else {
                 armJoystickMap.vacuumPosition = VacuumPosition.DOWN;
-                System.out.println("Vacuum DOWN");
             }
         }
 
-        armJoystickMap.vacuumPosition = VacuumPosition.DOWN;
+        //armJoystickMap.vacuumPosition = VacuumPosition.DOWN;
 
         //ARM CONTROL
         //Toggle Arm Control Type between Manual and Buttons
@@ -129,19 +130,25 @@ public class ArmControlScheme {
             }
         }
 
-        System.out.print(armJoystickMap.armControlType);
+        //PANCAKE CONTROL
+        if (joystick.getRawButtonPressed(Constants.TOGGLE_PANCAKE)) {
+            if (armJoystickMap.pancakeIntakePosition == PancakeIntakePosition.IN) {
+                armJoystickMap.pancakeIntakePosition = PancakeIntakePosition.OUT;
+            } else {
+                armJoystickMap.pancakeIntakePosition = PancakeIntakePosition.IN;
+            }
+        }
 
         //Automatic Arm Sensitivity
         armJoystickMap.manualArmSensitivity = Math.abs((joystick.getThrottle() - 1)/2);
         //Manual Arm Position Control
         armJoystickMap.manualArmPosition = new MotorSignal(joystick.getY());
-        System.out.println("joystick = " + joystick.getY());
         
         //Button Arm Position Control
         if (joystick.getRawButtonPressed(Constants.BALL_HEIGHT_POSITION_BUTTON)) {
             armJoystickMap.buttonArmPosition = ButtonArmPosition.BALL;
         } else if (joystick.getRawButtonPressed(Constants.SHUTTLE_SHOOTING_HEIGHT_POSITION_BUTTON)) {
-            armJoystickMap.buttonArmPosition = ButtonArmPosition.HATCH;
+            armJoystickMap.buttonArmPosition = ButtonArmPosition.CARGOBAY;
         } else if (joystick.getRawButtonPressed(Constants.ROCKET_HEIGHT_POSITION_BUTTON)) {
             armJoystickMap.buttonArmPosition = ButtonArmPosition.ROCKET;
         } else if (joystick.getRawButtonPressed(Constants.SHUTTLE_HEIGHT_POSITION_BUTTON)) {

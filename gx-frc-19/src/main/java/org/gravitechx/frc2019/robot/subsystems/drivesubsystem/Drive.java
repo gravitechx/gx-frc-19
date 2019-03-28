@@ -49,16 +49,21 @@ public class Drive {
 	
 	public void set(DifferentialDriveSignal diffSignal) {
 		diffSignal.limitValues();
-		leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * 3600);
-		rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * 3600);
-		System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
+		if (Constants.CLOSED_LOOP){
+			leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * 3600);
+			rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * 3600);
+		} else {
+			leftMasterTalon.set(ControlMode.PercentOutput, diffSignal.getLeftSide());
+			rightMasterTalon.set(ControlMode.PercentOutput, diffSignal.getRightSide());
+		}
+		//system.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
 		//System.out.println("CalculatedTurningValue: " + (360 * ((diffSignal.getRightSide() * Constants.maximumTickSpeed * Constants.ticksToMetersConversionFactor) - (diffSignal.getLeftSide() * Constants.maximumTickSpeed * Constants.ticksToMetersConversionFactor))/Constants.distanceBetweenWheelsMeters));
 		//leftMasterTalon.set(ControlMode.PercentOutput, 0.1);
 		//rightMasterTalon.set(ControlMode.PercentOutput, 0.1);
 	}
 	public void set(int tickSpeed){
-		System.out.println("ERROR: " + leftMasterTalon.getClosedLoopError(0));
-		System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
+		//System.out.println("ERROR: " + leftMasterTalon.getClosedLoopError(0));
+		//System.out.println("TICKS: " + leftMasterTalon.getSelectedSensorVelocity(0));
 		leftMasterTalon.set(ControlMode.Velocity, tickSpeed);
 		rightMasterTalon.set(ControlMode.Velocity, tickSpeed);
 	}
@@ -76,7 +81,13 @@ public class Drive {
 		leftMasterTalon.setNeutralMode(NeutralMode.Coast);
 		rightMasterTalon.setNeutralMode(NeutralMode.Coast);
 	}
-	public double getAveragedSpeed(){
+	public double getAverageSpeed(){
 		return (Math.abs(leftMasterTalon.getSelectedSensorVelocity()) + Math.abs(rightMasterTalon.getSelectedSensorVelocity()))/2;
 	}
+	public double getRightVelocityTicks() {
+		return rightMasterTalon.getSelectedSensorVelocity();
+	}
+	public double getLeftVelocityTicks(){
+		return leftMasterTalon.getSelectedSensorVelocity();
+	} 
 }

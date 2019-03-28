@@ -26,7 +26,7 @@ public class JoystickControlScheme {
 		if (oneJoystick.getRawButton(2)){
 			return oneJoystick.getX() * 0.4;
 		}
-		return (getThrottle() >= 0) ? (oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_VALUE) : (-oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_VALUE);
+		return (getThrottle() >= 0) ? (oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_SCALE_VALUE) : (-oneJoystick.getX() * Math.abs(getThrottle()) * Constants.SINGLE_JOYSTICK_ROTATION_SCALE_VALUE);
 	}
 
 	public boolean getLeftSkrtTurn(){

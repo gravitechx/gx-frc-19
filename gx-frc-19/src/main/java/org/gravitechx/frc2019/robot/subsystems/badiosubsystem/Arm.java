@@ -1,4 +1,3 @@
-
 package org.gravitechx.frc2019.robot.subsystems.badiosubsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -8,18 +7,18 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import org.gravitechx.frc2019.robot.Constants;
+import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
 import org.gravitechx.frc2019.utils.armutilities.MotorSignal;
-
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-import org.gravitechx.frc2019.robot.subsystems.badiosubsystem.Vacuum;
 
 public class Arm {
-    
-    private static Arm instance = new Arm()
+    private static Arm armInstance = new Arm();
     private Vacuum vacuum;
+    private Pancake pancake;
     private BallHolderState stateBH;
     private BallHolder armBH;
 
@@ -32,9 +31,9 @@ public class Arm {
        
 
         public BallHolder() {
-            armBH.config_kP(0, .023);  //.025
+            armBH.config_kP(0, .027);  //.025
             armBH.config_kI(0, 0);
-            armBH.config_kD(0, 1.26);      //1
+            armBH.config_kD(0, .9);      //1
             armBH.config_kF(0, 0);
             armBH.configAllowableClosedloopError(0, Constants.ARM_PID_ERROR);
             armBH.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
@@ -43,10 +42,9 @@ public class Arm {
         public void setArmBHPositionPID(ButtonArmPosition buttonArmPosition, BallHolderState stateBH) {
             switch(buttonArmPosition) {
                 case BALL:
-                    findRadians(Constants.BALL_HEIGHT_M);
                     armBH.set(ControlMode.Position, findTicks(Constants.BALL_HEIGHT_M), DemandType.ArbitraryFeedForward, stateBH.steadyStateVoltage);
                     break;
-                case HATCH:
+                case CARGOBAY:
                     //THE ANGLE NEEDED TO SHOOT THE BALL INTO THE SHUTTLE 
                     armBH.set(ControlMode.Position, findTicks(Constants.SHUTTLE_HEIGHT_M), DemandType.ArbitraryFeedForward, stateBH.steadyStateVoltage);
                     break;
@@ -76,20 +74,16 @@ public class Arm {
         }
 
         public void setBIOState(IntakeState intakeState) {
-            System.out.print("BIO State = ");
             switch(intakeState) {
                 case INHALE:
-                    System.out.println("INHALE");
                     rightArmBIO.set(ControlMode.PercentOutput, Constants.ARM_BIO_INHALE_SPEED);
                     leftArmBIO.set(ControlMode.PercentOutput, -Constants.ARM_BIO_INHALE_SPEED);
                     break;
                 case NEUTRAL:
-                    System.out.println("NEUTRAL");
                     rightArmBIO.set(ControlMode.PercentOutput, 0.0);
                     leftArmBIO.set(ControlMode.PercentOutput, 0.0);
                     break;
                 case EXHALE:
-                    System.out.println("EXHALE");
                     rightArmBIO.set(ControlMode.PercentOutput, Constants.ARM_BIO_EXHALE_SPEED);
                     leftArmBIO.set(ControlMode.PercentOutput, -Constants.ARM_BIO_EXHALE_SPEED);
                     break;
@@ -102,9 +96,8 @@ public class Arm {
         public double radians = 0.0;
         public double steadyStateVoltage = 0.0;
         OperatingState operating = OperatingState.OPENLOOP;
-
         public VacuumPosition wantedState;
-        public VacuumPosition currentState = VacuumPosition.UP;
+        public VacuumPosition currState = VacuumPosition.UP;
         public boolean gripperState = false;
 
         public double setPoint = 0;
@@ -115,7 +108,8 @@ public class Arm {
     }
     
     private Arm() {
-        vacuum = Vacuum.getVacuumInstance();
+        vacuum = Vacuum.getVacuumInstance(); 
+        pancake = Pancake.getPancakeInstance();
         armBH = new BallHolder();
         stateBH = new BallHolderState();
         this.zeroEncoder(Constants.ZERO_RADIAN_ENCODER);
@@ -123,16 +117,44 @@ public class Arm {
     }
 
     public static Arm getArmInstance() {
-        return instance;
+        return armInstance;
     }
 
     // Simple quick motor test
-    public void setMotor(MotorSignal motorSignal) {
-        armBH.getRightBIO().set(ControlMode.PercentOutput, motorSignal.getOutput());
-        armBH.getLeftBIO().set(ControlMode.PercentOutput, motorSignal.getOutput());
+    //public void setMotor(MotorSignal motorSignal) {
+        //armBH.getRightBIO().set(ControlMode.PercentOutput, motorSignal.getOutput());
+        //armBH.getLeftBIO().set(ControlMode.PercentOutput, motorSignal.getOutput());
         //armBH.getArmBH().set(ControlMode.PercentOutput, motorSignal.getOutput());
+    //}
+
+
+
+    //AUTON METHODS
+    public void setAutonPosition(ButtonArmPosition buttonArmPosition) {
+        ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().armControlType = ArmControlType.BUTTONS;
+        ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().buttonArmPosition = buttonArmPosition;
     }
 
+    //THERE IS NO TIME LIMIT TO THE INTAKE STATE, SO IT WILL KEEP INHALING/EXHALING UNTIL TOLD NOT TOO
+    //THIS RUNS AUTOMATIC INTAKE STATE, SO IF SET TO INHALE, BOTH VACUUM AND BIO WILL INHALE
+    //WHILE IF SET TO EXHALE, ONLY BIO AND NOT THE VACUUM WILL BE SET TO EXHALE
+    public void setAutonIntakeState(IntakeState intakeState) {
+        ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().automaticBIO = intakeState;
+    }
+
+    public void setAutonPancakePosition(PancakeIntakePosition position) {
+        pancake.setAutonPosition(position);
+    }
+
+    public void setAutonVacuumPosition(VacuumPosition position) {
+        vacuum.setAutonSolenoid(position);
+    }
+
+
+
+
+
+    //ENCODER STUFF    
     private static double findRadians(double achievableHeight) {
         return Math.acos(1 - ((achievableHeight - Constants.CHASIS_HEIGHT_M)/Constants.ARM_RADIUS_M)) - (Math.PI / 2);
     }
@@ -153,39 +175,40 @@ public class Arm {
         armBH.getArmBH().setSelectedSensorPosition((int) (zeroRadians / Constants.RADIANS_PER_TICK));
     }
 
-    // I don't know how to implement encoder values yet, but below is the methods for talonSRX
     public void armPerception() {
         stateBH.encoder_ticks = armBH.getArmBH().getSelectedSensorPosition();
         stateBH.radians = stateBH.encoder_ticks * Constants.RADIANS_PER_TICK;
         stateBH.steadyStateVoltage = Constants.STEADY_STATE_VOLTAGE * Math.cos(stateBH.radians);
     }
 
+    
+
+    //Execute method
     public void armAction(ArmJoystickMap armJoystickMap) {
-        wantedState = armJoystickMap.vacuumPosition;
+
+        pancake.pancakeAction(armJoystickMap.pancakeIntakePosition);
+
+        stateBH.wantedState = armJoystickMap.vacuumPosition;
+    
         if (stateBH.gripperState == false) {
             armBH.getGripperSolenoid().set(true);
             stateBH.gripperState = true;
         }
+
         switch(armJoystickMap.vacuumPosition) {
             case DOWN:
-                System.out.println("GRIPPER DOWN");
-                if (stateBH.currentState != stateBH.wantedState) {
-                    vacuum.setSolenoid(Constants.VACUUM_DOWN);
-                    currentState = VacuumPosition.DOWN;
+                if (stateBH.currState != stateBH.wantedState) {
+                    //if (stateBH.encoder_ticks < findTicks(Constants.BALL_HEIGHT_M) + Constants.ARM_PID_ERROR && stateBH.encoder_ticks > findTicks(Constants.BALL_HEIGHT_M) - Constants.ARM_PID_ERROR) {
+                        vacuum.setSolenoid(Value.kReverse);
+                        stateBH.currState = VacuumPosition.DOWN;
+                    //}
                 }
-                System.out.println("Vacuum DOWN");
-                System.out.println(armJoystickMap.armControlType);
                 //Controls Arm Position
                 switch(armJoystickMap.armControlType) {
                     case MANUAL:
-                        System.out.println("running = " + armJoystickMap.manualArmPosition.getOutput() * armJoystickMap.manualArmSensitivity);
-                        
-                        //USING STEADY STATE VOLTAGE WITH THE WPILIB LIBRARY METHOD
-
                         armBH.getArmBH().set(ControlMode.PercentOutput, new MotorSignal
                             (armJoystickMap.manualArmPosition.getOutput() * armJoystickMap.manualArmSensitivity).getOutput(),
-                            DemandType.ArbitraryFeedForward, stateBH.steadyStateVoltage);
-
+                                DemandType.ArbitraryFeedForward, (stateBH.steadyStateVoltage));
                         break;
                     case BUTTONS:
                         armBH.setArmBHPositionPID(armJoystickMap.buttonArmPosition, stateBH);
@@ -195,47 +218,43 @@ public class Arm {
                 armBH.setBIOState(armJoystickMap.manualHolderBIO);
                 
                 //Controls Manual Vacuum Holder Intake State
-                vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
+                //Vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
                 
                 //Controls Intake State
                 if (armJoystickMap.manualHolderBIO == IntakeState.NEUTRAL && armJoystickMap.manualVacuumBIO == IntakeState.NEUTRAL) {
                     switch (armJoystickMap.automaticBIO) {
                         case INHALE:
-                            System.out.println("WORKING YET???");
-                            vacuum.setVacuumBIO(IntakeState.INHALE);
+                            //vacuum.setVacuumBIO(IntakeState.INHALE);
                             armBH.setBIOState(IntakeState.INHALE);
                             break;
                         case NEUTRAL: 
-                            vacuum.setVacuumBIO(IntakeState.NEUTRAL);
+                            //vacuum.setVacuumBIO(IntakeState.NEUTRAL);
                             armBH.setBIOState(IntakeState.NEUTRAL);
                             break;
                         case EXHALE:
-                            vacuum.setVacuumBIO(IntakeState.NEUTRAL);
+                            //vacuum.setVacuumBIO(IntakeState.NEUTRAL);
                             armBH.setBIOState(IntakeState.EXHALE);
                             break;
                     }
                 }
-                
                 break;
+
             case UP:
                 //IMPORTANT: ROBOT'S STARTING POSITION MUST ALWAYS BE ARM DOWN, VACUUM DOWN
-                //armBH.setArmBHPositionPID(ButtonArmPosition.BALL);
+                armBH.setArmBHPositionPID(ButtonArmPosition.BALL, stateBH);
                 //MAKE SURE ARM IS BACK IN BALL POSITION BEFORE BRINGING VACUUM UP
-                if (stateBH.currentState != stateBH.wantedState) {
-                    if (true) { //if Arm is in ball position, execute below
-                        vacuum.setSolenoid(Constants.VACUUM_UP);
-                        currentState = vacuumPosition.UP;
-                        //System.out.println("Vacuum UP");
-                    }
-    
+                if (stateBH.currState != stateBH.wantedState) {
+                    //if (stateBH.encoder_ticks < findTicks(Constants.BALL_HEIGHT_M) + Constants.ARM_PID_ERROR && stateBH.encoder_ticks > findTicks(Constants.BALL_HEIGHT_M) - Constants.ARM_PID_ERROR) {
+                        vacuum.setSolenoid(Value.kForward);
+                        stateBH.currState = VacuumPosition.UP;
+                    //}
                 }
+
                 //Controls Manual Holder Intake State
                 armBH.setBIOState(armJoystickMap.manualHolderBIO);
 
                 //Controls Manual Vacuum Holder Intake State
-                vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
-
-
+                //vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
                 break;
 
         }
@@ -249,12 +268,6 @@ public class Arm {
         System.out.println("Manual Vacuum BIO = " + armJoystickMap.manualVacuumBIO);
         System.out.println("Automatic BIO = " + armJoystickMap.automaticBIO);
         */
-    }
-
-
-    //THIS DOESN"T WORK LAST I CHECKED. FIND THE SHUTTLE_SHOOTING_HEIGHT IN CONSTANTS, in Meters
-    public void setAutonPosition() {
-        armBH.setArmBHPositionPID(ButtonArmPosition.HATCH, stateBH);
     }
 
 }
