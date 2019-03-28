@@ -1,16 +1,14 @@
-package app;
-
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
 public class Path {
 
-    private static final double DISTANCE_BETWEEN_WHEELS = 0.705; //meters
+    private static final double DISTANCE_BETWEEN_WHEELS = 0.75; //meters
     private List<double[]> prePath = new ArrayList<double[]>();
-    private static final double MAX_ACCELERATION_OF_ROBOT = 1.0;
-    private static final double MAX_VELOCITY_OF_ROBOT = 4.0 ;
+    private static final double MAX_ACCELERATION_OF_ROBOT = 2.0;
+    private static final double MAX_VELOCITY_OF_ROBOT = 3.0 ;
     private static final double FREQUENCY = 0.005;
     private int index = 0;
     private List<double[]> leftRightMotor = new ArrayList<double[]>(); // format: [time, lVel, lAcc, rVel, rAcc]
@@ -30,7 +28,7 @@ public class Path {
 
     public void generatePath() throws InterruptedException, IOException{
 
-    	FileWriter fileWriter = new FileWriter("C:/Users/FRC/Desktop/temp/setpoint.txt");	//create a text file to store setpoints
+    	FileWriter fileWriter = new FileWriter("C://Users//Nathan//Desktop//setpoint//straightTrajectory.txt");	//create a text file to store setpoints
         PrintWriter printWriter = new PrintWriter(fileWriter);
         
         prePath.add(new double[]{0, 0, 0});//tell robot to decelerate to zero (position at rest)
@@ -41,14 +39,13 @@ public class Path {
 
         for(int i = 0; i < prePath.size(); i++){
             if(prePath.get(i)[0] == 0.0){ //if current prePath segment is line
-
                 boolean decelerate = false;
                 double currentDistance = 0.0;
                 double customDeceleration = 0.0;
-
+                //System.out.println(prePath.get(i)[2]-currentDistance);
                 for (int j = leftRightMotor.size() - 1; prePath.get(i)[2]-currentDistance > 0.00001; j++){ //While distance for current prePath segment hasn't been covered (0.00001 margin of error)
                     //Thread.sleep(10);
-
+                    //System.out.println("true");
                     currentT += FREQUENCY;
                     lCurrentVel += (leftRightMotor.get(j)[2] * FREQUENCY);
                     currentDistance += FREQUENCY * (leftRightMotor.get(j)[1] + lCurrentVel) / 2.0; //update distance covered
@@ -69,8 +66,8 @@ public class Path {
                             leftRightMotor.add(new double[]{currentT, lCurrentVel, cAccel, lCurrentVel, cAccel});
                         }
                     }
-                    System.out.println("Time: "+ leftRightMotor.get(j+1)[0] + ", lCurrentVel: " + lCurrentVel +", lAccel: " + leftRightMotor.get(j+1)[2]  + ", rAccel: "+ leftRightMotor.get(j+1)[4] +", Distance covered: "+ currentDistance); //print out setpoint to test errors
-                    printWriter.printf("%f,%f%n", leftRightMotor.get(j)[0], leftRightMotor.get(j)[1]);	//add a setpoint to the text file
+                    //System.out.println("Time: "+ leftRightMotor.get(j+1)[0] + ", lCurrentVel: " + lCurrentVel +", lAccel: " + leftRightMotor.get(j+1)[2]  + ", rAccel: "+ leftRightMotor.get(j+1)[4] +", Distance covered: "+ currentDistance); //print out setpoint to test errors
+                    printWriter.println(leftRightMotor.get(j)[0] + "," + leftRightMotor.get(j)[1] + "," + leftRightMotor.get(j)[2] + "," + leftRightMotor.get(j)[3] + "," +  leftRightMotor.get(j)[4]);	//add a setpoint to the text file
                 }
             }
             if(prePath.get(i)[0] == 1.0){
@@ -105,7 +102,7 @@ public class Path {
                 }
                 
                 for (int j = leftRightMotor.size() - 1; prePath.get(i)[2] - currentDistance > 0.00001; j++){ //While distance for current prePath segment hasn't been covered (0.00001 margin of error)
-                    Thread.sleep(10);
+                    //Thread.sleep(10);
 
                     currentT += FREQUENCY;
                     lCurrentVel += leftRightMotor.get(j)[2] * FREQUENCY;
@@ -138,13 +135,18 @@ public class Path {
                             leftRightMotor.add(new double[]{currentT, lCurrentVel, clAccel, rCurrentVel, crAccel});
                         }
                     }
-                    System.out.println("Time: "+ currentT + "\nlCurrentVel: " + lCurrentVel +"\nlAccel: " + leftRightMotor.get(j+1)[2]  + "\nrCurrentVel: " + lCurrentVel + "\nrAccel: "+ leftRightMotor.get(j+1)[4] +"\nDistance covered: "+ currentDistance + "\nrCurrentDistance: " + rCurrentDistance + "\nlCurrentDistance: " + lCurrentDistance +"\n"); //print out setpoint to test errors
+                    //System.out.println("Time: "+ currentT + "\nlCurrentVel: " + lCurrentVel +"\nlAccel: " + leftRightMotor.get(j+1)[2]  + "\nrCurrentVel: " + lCurrentVel + "\nrAccel: "+ leftRightMotor.get(j+1)[4] +"\nDistance covered: "+ currentDistance + "\nrCurrentDistance: " + rCurrentDistance + "\nlCurrentDistance: " + lCurrentDistance +"\n"); //print out setpoint to test errors
                     printWriter.printf("%f,%f%n", leftRightMotor.get(j)[0], leftRightMotor.get(j)[1]);	//add a setpoint to the text file
                     printWriter.printf("%f,%f%n", leftRightMotor.get(j)[0], leftRightMotor.get(j)[3]);	//add a setpoint to the text file
                 }
                 
 
             }
+            printWriter.println(currentT + ",0.00000,0.00000,0.00000,0.00000");
+            printWriter.println("!!!!!UntilStall!!!!!");
+            printWriter.println("-");
+            printWriter.println("0.00000,-0.25000,0.00000,-0.25000,0.00000");
+            printWriter.println("-");
             printWriter.close();
         }
         leftRightMotor.add(new double[]{currentT+FREQUENCY,0,0,0,0});
