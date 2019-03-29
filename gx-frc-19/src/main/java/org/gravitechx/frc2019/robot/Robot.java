@@ -24,6 +24,10 @@ import edu.wpi.first.wpilibj.SPI.Port;
 
 import java.io.PrintWriter;
 import java.io.FileWriter;
+
+
+//This is a test comment. DELETE
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
