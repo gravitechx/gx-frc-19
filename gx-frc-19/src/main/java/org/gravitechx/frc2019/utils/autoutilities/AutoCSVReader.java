@@ -48,9 +48,9 @@ public class AutoCSVReader {
 	        	while(Timer.getFPGATimestamp()-initialTime >= nextSetpoints[0] && waitForStall == false) {//If it's time to start using nextSetpoints
 	                latestSetpoints = nextSetpoints;
 	                if((line = br.readLine()) != null) {//If there's any more lines to read
-	                	if(!line.substring(0,1).equals("!")) {//If line != '!!!!!UntilStall!!!!!'
+	                	if(!line.substring(0,1).equals("!") && !line.substring(0,1).equals("@")) {//If line != '!!!!!UntilStall!!!!!' or '@ArmAction@'
 	                		nextSetpoints = stringsToDoubles(line.split(","));
-                        } else {//If line == '!!!!!UntilStall!!!!!'
+                        } else if(line.substring(0,1).equals("!")){//If line == '!!!!!UntilStall!!!!!'
                             System.out.println("Reading !!!!!UntilStall!!!!! loop");
 	                		waitForStall = true;
 	                		line = br.readLine();//Now line == '-'
@@ -58,7 +58,22 @@ public class AutoCSVReader {
                             latestSetpoints = stringsToDoubles(line.split(","));
                             nextSetpoints = new double[]{0,0,0,0,0};
 	                		line = br.readLine();//Now line == '-'
-	                	}
+	                	}/*ARMACTIONS else if(line.substring(0,1).equals("@")) {
+	                	    line = br.readLine();//Now line == ChangeArmPositionTo(...) <- No quotes inside of parentheses
+                            switch(line.substring(20,line.length()-1)) {
+                                case "CargoShip" :
+                                    //Move arm to appropriate setposition
+                                default :
+                                    System.out.println("AutoCSVReader didn't understand the content in the 'ChangeArmPositionTo()' setpoint.");
+                            }
+                            line = br.readLine();//Now line == SetArmActionTo(...) <- No quotes inside of parentheses
+                            switch(line.substring(15,line.length()-1)) {
+                                case "Intake" :
+                                    //Set rollers on arm to intake
+                                case "Outtake" :
+                                    //Set rollers on arm to outtake
+                            }
+                        }*/
 	                } else {
                         System.out.println("RUNNING THIS THING!!! NextSetpoints Before:" + Arrays.toString(nextSetpoints));
                         nextSetpoints = new double[]{};
