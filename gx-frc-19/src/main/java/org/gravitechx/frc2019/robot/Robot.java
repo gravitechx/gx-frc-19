@@ -11,22 +11,24 @@ import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
 import org.gravitechx.frc2019.utils.autoutilities.AutoCSVReader;
 import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme;
 import org.gravitechx.frc2019.robot.io.controlschemes.JoystickControlScheme;
+import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
 import org.gravitechx.frc2019.robot.subsystems.badiosubsystem.Arm;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 import java.io.PrintWriter;
 import java.io.FileWriter;
-
-
-//This is a test comment. DELETE
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -42,7 +44,6 @@ public class Robot extends TimedRobot {
 	public DrivePipeline pipe;
 	public AHRS gyro;
 	public AutoCSVReader autoReader;
-	//public DoubleSolenoid thing;
 	Command m_autonomousCommand;
 	//SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public PrintWriter printWriter;
@@ -52,6 +53,8 @@ public class Robot extends TimedRobot {
 	Arm arm;
 	ArmControlScheme armControlScheme;
 	//Vacuum vacuum = Vacuum.getVacuumInstance();
+	//VictorSPX random = new VictorSPX(6);
+	//VictorSPX random2 = new VictorSPX(0);
 
 	
 	/**
@@ -65,7 +68,6 @@ public class Robot extends TimedRobot {
 		drive = Drive.getInstance();
 		pipe = new DrivePipeline();
 		gyro = new AHRS(Port.kMXP);
-		//thing = new DoubleSolenoid(0, 1, 2);
 		arm = Arm.getArmInstance();
 		armControlScheme = ArmControlScheme.getControlSchemeInstance();
 		try {
@@ -139,13 +141,15 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
-		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
+		//drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
+		arm.setAutonVacuumPosition(VacuumPosition.DOWN);
+		arm.armAction(armControlScheme.getArmJoystickMap());
+		arm.armPerception();
 
-
-
+		/*
 		// AUTONOMOUS METHODS THAT SHOULD WORK FOR ARM AUTON
 		
-		/*
+		
 		//SET THE VACUUM TO DOWN BEFORE MOVING THE ARM TO AVOID COLLISIONS
 		arm.setAutonVacuumPosition(VacuumPosition.DOWN);
 
@@ -153,16 +157,13 @@ public class Robot extends TimedRobot {
 		//execute them. armPerception is needed for keeping the arm in it's setPosition.
 
 		//ButtonArmPosition.CARGOBAY is the shooting height for cargo bay (haven't been able to fine-tune yet)
-		arm.setAutonPosition(ButtonArmPosition.CARGOBAY);
-
+		arm.setAutonPosition(ButtonArmPosition.CARGOBAY);		
+		
 		arm.setAutonIntakeState(IntakeState.EXHALE);
-
+		arm.setAutonIntakeState(IntakeState.NEUTRAL);
 		//No idea if IN is actually holding the disks IN... will test when possible
-		arm.setAutonPancakePosition(PancakeIntakePosition.IN);
-
-		arm.armAction(armControlScheme.getArmJoystickMap());
-		arm.armPerception();
-		/*
+		//arm.setAutonPancakePosition(PancakeIntakePosition.IN);
+		*/
 
 
 
@@ -171,13 +172,13 @@ public class Robot extends TimedRobot {
 		} else {
 			drive.set(0);
 		}*/
-		/*try {
+		try {
 			double[] currents = {pdp.getCurrent(Constants.LEFT_MASTER_TALON_PORT), pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_ONE), pdp.getCurrent(Constants.LEFT_SLAVE_VICTOR_PORT_TWO), pdp.getCurrent(Constants.RIGHT_MASTER_TALON_PORT), pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_ONE), pdp.getCurrent(Constants.RIGHT_SLAVE_VICTOR_PORT_TWO)};
 			autonomousSetpoints = autoReader.getSetpoints(drive.getLeftVelocityTicks(), drive.getRightVelocityTicks(), currents);
 		} catch (Exception e){
 			System.out.println("Autonomous cannot get setpoints. Periodically");
 		}
-		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));*/
+		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
 	}
 
 	@Override
@@ -201,8 +202,11 @@ public class Robot extends TimedRobot {
 		drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
 		Scheduler.getInstance().run();
 		//System.out.println("running?");
-		
+	
 		//vacuum.setSolenoid(Value.kForward);
+		
+		//random.set(ControlMode.PercentOutput, -0.35);
+		//random2.set(ControlMode.PercentOutput, -0.35);
 		
 		arm.armPerception();
     	armControlScheme.updateButtonMap();

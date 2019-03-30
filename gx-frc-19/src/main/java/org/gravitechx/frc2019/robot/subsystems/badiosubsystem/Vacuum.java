@@ -45,15 +45,15 @@ public class Vacuum {
     public void setVacuumBIO(IntakeState intakeState) {
         switch(intakeState) {
             case INHALE: 
-                leftVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_INHALE_SPEED);
+                //leftVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_INHALE_SPEED);
                 rightVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_INHALE_SPEED);
                 break;
             case NEUTRAL:
-                leftVacuumBIO.set(ControlMode.PercentOutput, 0);
+                //leftVacuumBIO.set(ControlMode.PercentOutput, 0);
                 rightVacuumBIO.set(ControlMode.PercentOutput, 0);
                 break;
             case EXHALE:
-                leftVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_EXHALE_SPEED);
+                //leftVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_EXHALE_SPEED);
                 rightVacuumBIO.set(ControlMode.PercentOutput, Constants.VACUUM_EXHALE_SPEED);
                 break;
         }

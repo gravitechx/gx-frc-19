@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class Arm {
     private static Arm armInstance = new Arm();
     private Vacuum vacuum;
-    private Pancake pancake;
+    //private Pancake pancake;
     private BallHolderState stateBH;
     private BallHolder armBH;
 
@@ -31,9 +31,9 @@ public class Arm {
        
 
         public BallHolder() {
-            armBH.config_kP(0, .027);  //.025
+            armBH.config_kP(0, 0.027); //.027  //.025
             armBH.config_kI(0, 0);
-            armBH.config_kD(0, .9);      //1
+            armBH.config_kD(0, 0.9);  //0.9    //1
             armBH.config_kF(0, 0);
             armBH.configAllowableClosedloopError(0, Constants.ARM_PID_ERROR);
             armBH.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
@@ -109,7 +109,7 @@ public class Arm {
     
     private Arm() {
         vacuum = Vacuum.getVacuumInstance(); 
-        pancake = Pancake.getPancakeInstance();
+        //pancake = Pancake.getPancakeInstance();
         armBH = new BallHolder();
         stateBH = new BallHolderState();
         this.zeroEncoder(Constants.ZERO_RADIAN_ENCODER);
@@ -142,12 +142,22 @@ public class Arm {
         ArmControlScheme.getControlSchemeInstance().getArmJoystickMap().automaticBIO = intakeState;
     }
 
+    /*
     public void setAutonPancakePosition(PancakeIntakePosition position) {
         pancake.setAutonPosition(position);
     }
+    */
 
     public void setAutonVacuumPosition(VacuumPosition position) {
         vacuum.setAutonSolenoid(position);
+    }
+
+    public void setGripper() {
+        if (stateBH.gripperState == false) {
+            armBH.getGripperSolenoid().set(true);
+            stateBH.gripperState = true;
+        }
+
     }
 
 
@@ -181,12 +191,10 @@ public class Arm {
         stateBH.steadyStateVoltage = Constants.STEADY_STATE_VOLTAGE * Math.cos(stateBH.radians);
     }
 
-    
-
     //Execute method
     public void armAction(ArmJoystickMap armJoystickMap) {
 
-        pancake.pancakeAction(armJoystickMap.pancakeIntakePosition);
+        //pancake.pancakeAction(armJoystickMap.pancakeIntakePosition);
 
         stateBH.wantedState = armJoystickMap.vacuumPosition;
     
@@ -218,21 +226,21 @@ public class Arm {
                 armBH.setBIOState(armJoystickMap.manualHolderBIO);
                 
                 //Controls Manual Vacuum Holder Intake State
-                //Vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
+                vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
                 
                 //Controls Intake State
                 if (armJoystickMap.manualHolderBIO == IntakeState.NEUTRAL && armJoystickMap.manualVacuumBIO == IntakeState.NEUTRAL) {
                     switch (armJoystickMap.automaticBIO) {
                         case INHALE:
-                            //vacuum.setVacuumBIO(IntakeState.INHALE);
+                            vacuum.setVacuumBIO(IntakeState.INHALE);
                             armBH.setBIOState(IntakeState.INHALE);
                             break;
                         case NEUTRAL: 
-                            //vacuum.setVacuumBIO(IntakeState.NEUTRAL);
+                            vacuum.setVacuumBIO(IntakeState.NEUTRAL);
                             armBH.setBIOState(IntakeState.NEUTRAL);
                             break;
                         case EXHALE:
-                            //vacuum.setVacuumBIO(IntakeState.NEUTRAL);
+                            vacuum.setVacuumBIO(IntakeState.NEUTRAL);
                             armBH.setBIOState(IntakeState.EXHALE);
                             break;
                     }
@@ -254,7 +262,7 @@ public class Arm {
                 armBH.setBIOState(armJoystickMap.manualHolderBIO);
 
                 //Controls Manual Vacuum Holder Intake State
-                //vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
+                vacuum.setVacuumBIO(armJoystickMap.manualVacuumBIO);
                 break;
 
         }
