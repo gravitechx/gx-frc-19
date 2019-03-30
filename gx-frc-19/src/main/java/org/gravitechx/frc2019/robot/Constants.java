@@ -63,7 +63,7 @@ public class Constants {
 	
 	public static final boolean THROTTLE_IS_REVERSED = true;
 
-	public static final double MAXIMUM_DRIVE_SPEED_TICKS = 6900;
+	public static final double MAXIMUM_DRIVE_SPEED_TICKS = 3600;
 
 	/**
 	 * PID Controllers

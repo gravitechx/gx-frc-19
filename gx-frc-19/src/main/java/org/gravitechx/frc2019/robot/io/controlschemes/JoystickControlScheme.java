@@ -36,4 +36,8 @@ public class JoystickControlScheme {
 	public boolean getRightSkrtTurn(){
 		return oneJoystick.getRawButton(4);
 	}
+
+	public boolean getYeetButton(){
+		return oneJoystick.getRawButton(9);
+	}
 }

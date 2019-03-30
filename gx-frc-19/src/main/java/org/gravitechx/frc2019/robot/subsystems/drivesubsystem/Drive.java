@@ -50,8 +50,8 @@ public class Drive {
 	public void set(DifferentialDriveSignal diffSignal) {
 		diffSignal.limitValues();
 		if (Constants.CLOSED_LOOP){
-			leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * 3600);
-			rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * 3600);
+			leftMasterTalon.set(ControlMode.Velocity, diffSignal.getLeftSide() * Constants.MAXIMUM_DRIVE_SPEED_TICKS);
+			rightMasterTalon.set(ControlMode.Velocity, diffSignal.getRightSide() * Constants.MAXIMUM_DRIVE_SPEED_TICKS);
 		} else {
 			leftMasterTalon.set(ControlMode.PercentOutput, diffSignal.getLeftSide());
 			rightMasterTalon.set(ControlMode.PercentOutput, diffSignal.getRightSide());

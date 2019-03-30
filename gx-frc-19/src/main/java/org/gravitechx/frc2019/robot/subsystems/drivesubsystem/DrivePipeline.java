@@ -6,7 +6,7 @@ import org.gravitechx.frc2019.utils.driveutilities.RotationalDriveSignal;
 
 public class DrivePipeline {
 	double quickTurnAccumulator = 0;
-	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal, boolean leftButton, boolean rightButton) {		
+	public DifferentialDriveSignal filter(RotationalDriveSignal rotationalDriveSignal, boolean leftButton, boolean rightButton, boolean yeetButton) {		
 		//applies the Constants.java deadband amounts to both throttle and wheel/rotation joystick
 		rotationalDriveSignal.applyDeadband(Constants.THROTTLE_DEADBAND, Constants.ROTATION_DEADBAND);
 		
@@ -14,8 +14,11 @@ public class DrivePipeline {
 		rotationalDriveSignal.limitWheelSensitivity(Constants.WHEEL_SENSITIVITY_VALUE);
 
 		//scales the joystick values to what we want them to be, adjusting speed
-		rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE);
-
+		if (yeetButton){
+			rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE + (1-Constants.SPEED_SCALE_VALUE));
+		} else {
+			rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE);
+		}
 		/**
 		 * This next segment of code addresses if the top turn buttons
 		 * are being pressed. The first if statement makes the contents only
