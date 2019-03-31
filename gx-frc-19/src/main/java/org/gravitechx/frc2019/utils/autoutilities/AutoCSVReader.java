@@ -70,34 +70,44 @@ public class AutoCSVReader {
                                     switch(line.substring(28,line.length()-1)) {
                                         case "VacuumPosition.DOWN" :
                                             arm.setAutonVacuumPosition(VacuumPosition.DOWN);
+                                            break;
                                         default :
                                             System.out.println("@arm.setAutonVacuumPosition is having issues reading what is inisde the parentheses in its call in the setpoints file.");
                                             System.out.println(line.substring(28,line.length()-1));
+                                            break;
                                     }
-                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;
+                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;//How many seconds to wait after this arm action
+                                    break;
                                 case "@arm.setAutonPosition" :
                                     switch(line.substring(22,line.length()-1)) {
                                         case "ButtonArmPosition.CARGOBAY" :
                                             arm.setAutonPosition(ButtonArmPosition.CARGOBAY);
+                                            break;
                                         default :
                                             System.out.println("@arm.setAutonPosition is having issues reading what is inisde the parentheses in its call in the setpoints file.");
                                             System.out.println(line.substring(22,line.length()-1));
+                                            break;
                                     }
-                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;
+                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;//How many seconds to wait after this arm action
+                                    break;
                                 case "@arm.setAutonIntakeSt" :
                                     switch(line.substring(25,line.length()-1)) {
                                         case "IntakeState.EXHALE" :
                                             arm.setAutonIntakeState(IntakeState.EXHALE);
-                                            System.out.println("IT'S EXHALING");
+                                            break;
                                         case "IntakeState.NEUTRAL" :
                                             arm.setAutonIntakeState(IntakeState.NEUTRAL);
+                                            break;
                                         default :
                                             System.out.println("@arm.setAutonIntakeState is having issues reading what is inisde the parentheses in its call in the setpoints file.");
                                             System.out.println(line.substring(25,line.length()-1));
+                                            break;
                                     }
-                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;
+                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;//How many seconds to wait after this arm action
+                                    break;
                                 default :
                                     System.out.println("Can't read the command given in the setpoints file. The line '" + line + "' is unreadable.");
+                                    break;
                             }
                             
                         }
