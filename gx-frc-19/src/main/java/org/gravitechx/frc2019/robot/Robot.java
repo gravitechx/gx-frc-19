@@ -17,6 +17,8 @@ import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.Drive;
 import org.gravitechx.frc2019.robot.subsystems.drivesubsystem.DrivePipeline;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -69,6 +71,9 @@ public class Robot extends TimedRobot {
 		pipe = new DrivePipeline();
 		gyro = new AHRS(Port.kMXP);
 		arm = Arm.getArmInstance();
+		CameraServer.getInstance().startAutomaticCapture();
+
+
 		armControlScheme = ArmControlScheme.getControlSchemeInstance();
 		try {
 			autoReader = new AutoCSVReader();
@@ -142,7 +147,7 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
 		//drive.set(pipe.filter(new RotationalDriveSignal(driverControls.getThrottle(), driverControls.getRotation()), driverControls.getLeftSkrtTurn(), driverControls.getRightSkrtTurn()));
-		arm.setAutonVacuumPosition(VacuumPosition.DOWN);
+		//arm.setAutonVacuumPosition(VacuumPosition.DOWN);
 		arm.armAction(armControlScheme.getArmJoystickMap());
 		arm.armPerception();
 
@@ -178,7 +183,9 @@ public class Robot extends TimedRobot {
 		} catch (Exception e){
 			System.out.println("Autonomous cannot get setpoints. Periodically");
 		}
-		drive.set((int)(855.51049 * autonomousSetpoints[0]), (int)(855.51049 * autonomousSetpoints[2]));
+		//(2, 0) = RIGHT START POSITION
+		//(0, 2) = LEFT START POSITION
+		drive.set((int)(855.51049 * autonomousSetpoints[2]), (int)(855.51049 * autonomousSetpoints[0]));
 	}
 
 	@Override

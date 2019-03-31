@@ -56,9 +56,13 @@ public class ArmControlScheme {
             return ArmControlScheme.getJoystick();
         }
 
+        public boolean getZeroEncoderButton() {
+            return joystick.getRawButtonPressed(Constants.ZERO_ENCODER_BUTTON);
+        }
+
         //Arm Control and Arm Position
         public ArmControlType armControlType = ArmControlType.BUTTONS;
-        public ButtonArmPosition buttonArmPosition = ButtonArmPosition.BALL;
+        public ButtonArmPosition buttonArmPosition = ButtonArmPosition.ROCKET;
         public MotorSignal manualArmPosition = new MotorSignal(0);
         public double manualArmSensitivity = 0;
         //Intake States

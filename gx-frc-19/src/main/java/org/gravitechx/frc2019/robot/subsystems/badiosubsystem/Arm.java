@@ -194,6 +194,10 @@ public class Arm {
     //Execute method
     public void armAction(ArmJoystickMap armJoystickMap) {
 
+        if (armJoystickMap.getZeroEncoderButton()) {
+            this.zeroEncoder(Constants.ZERO_RADIAN_ENCODER);
+        }
+
         //pancake.pancakeAction(armJoystickMap.pancakeIntakePosition);
 
         stateBH.wantedState = armJoystickMap.vacuumPosition;

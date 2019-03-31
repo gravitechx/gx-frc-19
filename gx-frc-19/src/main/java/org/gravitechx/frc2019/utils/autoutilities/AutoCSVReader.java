@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+
+import org.gravitechx.frc2019.robot.io.controlschemes.ArmControlScheme.ArmJoystickMap.*;
 import org.gravitechx.frc2019.robot.subsystems.badiosubsystem.Arm;
 
 public class AutoCSVReader {
@@ -16,8 +18,7 @@ public class AutoCSVReader {
     private BufferedReader br;
     private double[] latestSetpoints, nextSetpoints;
     private double initialTime, initialStallTime, pauseForArmMovement;
-    private Arm arm;
-    arm = Arm.getArmInstance();
+    Arm arm = Arm.getArmInstance();
     
     public AutoCSVReader() throws FileNotFoundException, IOException{
         resetReader();
@@ -32,19 +33,23 @@ public class AutoCSVReader {
             if(waitForStall) {//If we're waiting for the robot to hit a wall and stall out the motors
             	double leftPDPCurrent = (pdpCurrents[0] + pdpCurrents[1] + pdpCurrents[2])/3.0;
             	double rightPDPCurrent = (pdpCurrents[3] + pdpCurrents[4] + pdpCurrents[5])/3.0;
+                //START
                 if(Math.abs(leftTickSpeed) < stallTickSpeed && Math.abs(rightTickSpeed) < stallTickSpeed && leftPDPCurrent > stallCurrentThreshold && rightPDPCurrent > stallCurrentThreshold) {
                     if(initialStallTime == -1) {
                         initialStallTime = Timer.getFPGATimestamp();
                     } else if(Timer.getFPGATimestamp()-initialStallTime > stallWaitTime) {
+                        //STOP
                         waitForStall = false;
-                        br = new BufferedReader(new FileReader("/home/admin/PathFive.txt"));
+                        br = new BufferedReader(new FileReader("/home/admin/BackUpToCargoShip-Left.txt"));
                         latestSetpoints = stringsToDoubles(br.readLine().split(","));
                         nextSetpoints = stringsToDoubles(br.readLine().split(","));
                         initialTime = Timer.getFPGATimestamp();
+                    //START
                     }
             	} else {
                     initialStallTime = -1;
                 }
+                //STOP
             } else {
 	        	while(Timer.getFPGATimestamp()-initialTime >= nextSetpoints[0] && waitForStall == false && Timer.getFPGATimestamp()-pauseForArmMovement >= 0) {//If it's time to start using nextSetpoints
 	                latestSetpoints = nextSetpoints;
@@ -67,26 +72,30 @@ public class AutoCSVReader {
                                             arm.setAutonVacuumPosition(VacuumPosition.DOWN);
                                         default :
                                             System.out.println("@arm.setAutonVacuumPosition is having issues reading what is inisde the parentheses in its call in the setpoints file.");
+                                            System.out.println(line.substring(28,line.length()-1));
                                     }
-                                    pauseForArmMovement = Timer.getFPGATimestamp() + 3;
+                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;
                                 case "@arm.setAutonPosition" :
                                     switch(line.substring(22,line.length()-1)) {
                                         case "ButtonArmPosition.CARGOBAY" :
                                             arm.setAutonPosition(ButtonArmPosition.CARGOBAY);
                                         default :
                                             System.out.println("@arm.setAutonPosition is having issues reading what is inisde the parentheses in its call in the setpoints file.");
+                                            System.out.println(line.substring(22,line.length()-1));
                                     }
-                                    pauseForArmMovement = Timer.getFPGATimestamp() + 3;
+                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;
                                 case "@arm.setAutonIntakeSt" :
                                     switch(line.substring(25,line.length()-1)) {
                                         case "IntakeState.EXHALE" :
                                             arm.setAutonIntakeState(IntakeState.EXHALE);
+                                            System.out.println("IT'S EXHALING");
                                         case "IntakeState.NEUTRAL" :
                                             arm.setAutonIntakeState(IntakeState.NEUTRAL);
                                         default :
                                             System.out.println("@arm.setAutonIntakeState is having issues reading what is inisde the parentheses in its call in the setpoints file.");
+                                            System.out.println(line.substring(25,line.length()-1));
                                     }
-                                    pauseForArmMovement = Timer.getFPGATimestamp() + 3;
+                                    pauseForArmMovement = Timer.getFPGATimestamp() + 1;
                                 default :
                                     System.out.println("Can't read the command given in the setpoints file. The line '" + line + "' is unreadable.");
                             }
@@ -118,5 +127,6 @@ public class AutoCSVReader {
         waitForStall = false;
         initialStallTime = -1;
         pauseForArmMovement = Timer.getFPGATimestamp();
+        arm.setAutonVacuumPosition(VacuumPosition.DOWN);
     }
 }

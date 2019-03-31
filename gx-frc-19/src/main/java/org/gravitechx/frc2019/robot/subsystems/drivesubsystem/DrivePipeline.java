@@ -15,7 +15,8 @@ public class DrivePipeline {
 
 		//scales the joystick values to what we want them to be, adjusting speed
 		if (yeetButton){
-			rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE + (1-Constants.SPEED_SCALE_VALUE));
+			System.out.println("YEEEEEEEET");
+			rotationalDriveSignal.scaleValues(1);
 		} else {
 			rotationalDriveSignal.scaleValues(Constants.SPEED_SCALE_VALUE);
 		}

@@ -71,7 +71,7 @@ public class Constants {
 
 	 //Drive PID Settings
 
-	public static final boolean CLOSED_LOOP = true;
+	public static final boolean CLOSED_LOOP = false;
 
 	 /*public static final double kProportional = 0.5;
 	 public static final double kIntegral = 0.00000001;
@@ -108,6 +108,7 @@ public class Constants {
     public static final int MANUAL_HOLDER_EXHALE_BUTTON = 11;
 	public static final int MANUAL_HOLDER_INHALE_BUTTON = 12;
 	public static final int TOGGLE_PANCAKE = 2;
+	public static final int ZERO_ENCODER_BUTTON = 1;
 
 
 
@@ -160,11 +161,11 @@ public class Constants {
 
     //HEIGHTS IN METERS
     public static final double BALL_HEIGHT_M = .1;
-    public static final double CARGO_BAY_HEIGHT_M = .52;
-    public static final double ROCKET_HEIGHT_M = .70;
-    public static final double SHUTTLE_HEIGHT_M = .27;
+    public static final double CARGO_BAY_HEIGHT_M = .45;
+	public static final double ROCKET_HEIGHT_M = .70;
+    public static final double SHUTTLE_HEIGHT_M = .6;
 
-    public static final double ARM_BIO_EXHALE_SPEED = 0.6;
+    public static final double ARM_BIO_EXHALE_SPEED = 0.8;
 	public static final double ARM_BIO_INHALE_SPEED = -0.4;
 	
 
